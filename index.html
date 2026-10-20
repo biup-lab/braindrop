@@ -1,0 +1,1509 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>머릿속 — BrainDrop</title>
+<meta name="theme-color" content="#FFFFFF">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="머릿속">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF; --surface:#FFFFFF; --sunk:#F2F6FE; --ink:#13203A; --muted:#6E7A90; --line:#E4EAF4;
+  --btn:#3E6FF0; --btn-ink:#FFFFFF; --hl:#D6E4FF;
+  --glow1:rgba(130,170,255,.20); --glow2:rgba(150,215,245,.16);
+  --meet:#3864E8; --idea:#B98C00; --todo:#178F60; --life:#8A5CD0; --raw:#8A8A88;
+  --meet-bg:#E7EDFD; --idea-bg:#FFF4C7; --todo-bg:#DFF3EA; --life-bg:#EFE7FA; --raw-bg:#EEEEEC;
+  --warn:#C2452D;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (max-width:0px){
+  :root.no-dark{
+    --bg:#0C1322; --surface:#141F33; --sunk:#1A2740; --ink:#E5EDFA; --muted:#8C9DBA; --line:#22314B;
+    --btn:#4C7DFF; --btn-ink:#FFFFFF; --hl:#2C55B0;
+    --glow1:rgba(76,125,255,.20); --glow2:rgba(60,200,230,.12);
+    --meet:#8AA6FF; --idea:#F0C53A; --todo:#55CC99; --life:#BC97F5; --raw:#A0A09D;
+    --meet-bg:#222B45; --idea-bg:#38321A; --todo-bg:#1A3329; --life-bg:#2D2540; --raw-bg:#2A2A29;
+    --warn:#FF8A70; color-scheme:dark;
+  }
+}
+:root.no-dark-2{
+  --bg:#0C1322; --surface:#141F33; --sunk:#1A2740; --ink:#E5EDFA; --muted:#8C9DBA; --line:#22314B;
+  --btn:#4C7DFF; --btn-ink:#FFFFFF; --hl:#2C55B0;
+  --glow1:rgba(76,125,255,.20); --glow2:rgba(60,200,230,.12);
+  --meet:#8AA6FF; --idea:#F0C53A; --todo:#55CC99; --life:#BC97F5; --raw:#A0A09D;
+  --meet-bg:#222B45; --idea-bg:#38321A; --todo-bg:#1A3329; --life-bg:#2D2540; --raw-bg:#2A2A29;
+  --warn:#FF8A70; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow:hidden}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--meet);outline-offset:2px;border-radius:8px}
+svg{display:block}
+
+/* ---------- home ---------- */
+.home{height:100%;display:flex;flex-direction:column;max-width:720px;margin:0 auto;padding:12px 16px 0;position:relative}
+.top{display:flex;align-items:center;justify-content:space-between}
+.round{width:52px;height:52px;border-radius:50%;border:none;background:var(--surface);display:grid;place-items:center;position:relative;box-shadow:0 0 0 1px var(--line)}
+.badge{position:absolute;top:6px;right:6px;min-width:18px;height:18px;border-radius:9px;background:var(--btn);color:var(--btn-ink);font-size:11px;font-weight:700;line-height:18px;padding:0 5px;text-align:center}
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;padding:0 8px;min-height:0}
+.hero::before{content:"";position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle at 40% 40%,var(--glow1),transparent 62%),radial-gradient(circle at 65% 60%,var(--glow2),transparent 60%);filter:blur(10px);z-index:0;pointer-events:none}
+.hero>*{position:relative;z-index:1}
+.mark{font-size:15px;font-weight:700;letter-spacing:-0.02em;margin-bottom:14px}
+.mark span{background:linear-gradient(transparent 55%,var(--hl) 55%,var(--hl) 92%,transparent 92%);padding:0 2px}
+.greet{font-size:clamp(26px,7vw,34px);font-weight:700;letter-spacing:-0.035em;line-height:1.25;margin:0}
+.sub{color:var(--muted);font-size:15px;margin:12px 0 0;max-width:22em}
+.homesleep{margin-top:18px;border:none;background:var(--surface);box-shadow:0 0 0 1px var(--line);border-radius:999px;padding:8px 16px;font-size:14px;color:var(--ink)}
+.homesleep b{color:var(--warn)}
+
+.results{display:flex;flex-direction:column;gap:8px;padding-bottom:var(--compH,150px)}
+.rcard{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;border:none;background:var(--surface);border-radius:16px;padding:12px 14px;box-shadow:0 0 0 1px var(--line);border-left:4px solid var(--c,var(--raw))}
+.rcard .r-body{flex:1;min-width:0}
+.rcard .r-head{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--muted)}
+.rcard .r-title{font-weight:700;font-size:15.5px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rcard .r-meta{font-size:13px;color:var(--muted);margin-top:2px}
+.rcard .r-go{align-self:center;color:var(--muted)}
+.rlist{background:var(--surface);border-radius:18px;box-shadow:0 0 0 1px var(--line);padding:2px 8px}
+.rrow{display:flex;align-items:center;gap:11px;padding:6px 6px;min-height:46px}
+.rrow+.rrow{border-top:1px solid var(--line)}
+.rck{width:21px;height:21px;border-radius:50%;border:2px solid var(--c);background:transparent;flex:none;padding:0;display:grid;place-items:center;color:#fff}
+.rrow.ok .rck{background:var(--c)}
+.rrow.ok .rck::after{content:"✓";font-size:12px;font-weight:700;line-height:1}
+.rt{flex:1;min-width:0;border:none;background:transparent;text-align:left;font-size:15.5px;font-weight:500;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:8px 0}
+.rt small{color:var(--muted);font-weight:400;font-size:12.5px;margin-left:8px}
+.rrow.ok .rt{text-decoration:line-through;color:var(--muted)}
+.rc{font-size:12px;color:var(--c);font-weight:700;flex:none}
+.rrow .dot{margin:0 7px}
+.pager{position:fixed;top:calc(env(safe-area-inset-top,0px) + 34px);left:50%;transform:translateX(-50%);z-index:16;display:flex;gap:6px;align-items:center}
+.pager button{width:8px;height:8px;border-radius:4px;border:none;padding:0;background:var(--line);transition:width .2s,background .2s}
+.pager button[aria-pressed="true"]{width:22px;background:var(--btn)}
+.pager button{position:relative}
+.pager button::after{content:"";position:absolute;inset:-12px -5px}
+.lpage{position:fixed;inset:0;z-index:15;background:var(--bg);transform:translateX(100%);visibility:hidden;transition:transform .25s ease,visibility .25s;overflow-y:auto;padding-top:env(safe-area-inset-top,0px)}
+.lpage.on{transform:none;visibility:visible}
+@media (prefers-reduced-motion:reduce){.lpage{transition:none}}
+.lwrap{max-width:720px;margin:0 auto;padding:68px 16px calc(var(--compH,150px) + 16px)}
+#mpage .lwrap{padding-bottom:0}
+#mpage{overflow:hidden}
+.lhead{display:flex;align-items:baseline;gap:8px;margin:0 4px 12px}
+.lhead .homeb{margin-right:4px}
+.lhead h2{margin:0;font-size:22px;letter-spacing:-0.03em}
+.lhead span{color:var(--muted);font-size:14px}
+.lgrp{font-size:12.5px;color:var(--muted);margin:16px 6px 6px}
+.cpage-wrap{max-width:720px;margin:0 auto;padding:68px 14px calc(var(--compH,150px) + 16px)}
+.chead{display:flex;align-items:center;gap:6px;margin:0 2px 10px}
+.chead h2{margin:0;font-size:22px;letter-spacing:-0.03em;flex:1}
+.chead button{border:none;background:var(--surface);box-shadow:0 0 0 1px var(--line);border-radius:12px;height:38px;min-width:38px;padding:0 10px;display:grid;place-items:center;font-size:14px;color:var(--ink)}
+.cal7{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cdow{text-align:center;font-size:12px;color:var(--muted);padding:2px 0 4px}
+.cdow.sun{color:var(--warn)}
+.cdow.sat{color:var(--meet)}
+.cday{border:none;background:var(--surface);box-shadow:0 0 0 1px var(--line);border-radius:12px;min-height:64px;padding:5px 4px;display:flex;flex-direction:column;align-items:stretch;gap:2px;text-align:left;color:var(--ink);min-width:0;overflow:hidden}
+.cday.blank{background:transparent;box-shadow:none}
+.cday .dn{font-size:13px;font-weight:600;text-align:center;line-height:22px;height:22px;width:22px;border-radius:50%;margin:0 auto 1px}
+.cday.sun .dn,.cday.hol .dn{color:var(--warn)}
+.cday.sat .dn{color:var(--meet)}
+.cday.today .dn{color:var(--btn-ink)}
+.hname{display:block;font-size:9.5px;line-height:1.2;color:var(--muted);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px}
+.cday.hol .hname{color:var(--warn)}
+.cselh em{font-style:normal;font-size:13px;color:var(--warn)}
+.cselh em.anniv{color:var(--muted)}
+.cday.today .dn{background:var(--btn);color:var(--btn-ink)}
+.cday.sel{box-shadow:0 0 0 2px var(--btn)}
+.cdots{display:flex;gap:3px;justify-content:center;flex-wrap:wrap}
+.cdots i{width:6px;height:6px;border-radius:50%;background:var(--c)}
+.cdots i.ok{opacity:.3}
+.cdots em{font-style:normal;font-size:10px;color:var(--muted);line-height:6px}
+.ctit{display:none}
+@media (min-width:600px){
+  .cday{min-height:92px}
+  .cdots{display:none}
+  .ctit{display:block;font-size:11.5px;line-height:1.3;padding:1px 4px;border-radius:5px;background:var(--cbg);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:2px solid var(--c)}
+  .ctit.ok{opacity:.45;text-decoration:line-through}
+  .cmore{font-size:11px;color:var(--muted);padding-left:4px}
+}
+@media (max-width:599px){ .cmore{display:none} }
+.cselh{display:flex;align-items:baseline;gap:8px;margin:18px 4px 8px}
+.cselh b{font-size:16px}
+.cselh span{font-size:13px;color:var(--muted)}
+.cchips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 6px 0}
+.cchips:empty{display:none}
+.cchip{border:none;background:var(--sunk);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--ink);display:flex;align-items:center;gap:6px}
+.cchip.b{background:var(--meet-bg);color:var(--meet);font-weight:600}
+.cchip .x{opacity:.6;font-weight:700}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:37;max-width:720px;margin:0 auto;background:var(--surface);border-radius:24px 24px 0 0;box-shadow:0 -8px 30px rgba(10,20,45,.12);padding:10px 18px calc(18px + env(safe-area-inset-bottom,0px));transform:translateY(105%);visibility:hidden;transition:transform .22s ease,visibility .22s;max-height:70vh;overflow-y:auto}
+.sheet.on{transform:none;visibility:visible}
+@media (prefers-reduced-motion:reduce){.sheet{transition:none}}
+.sheet .grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 12px}
+.sheet h3{margin:0 0 4px;font-size:17px}
+.sheet p{margin:0 0 12px;font-size:13px;color:var(--muted)}
+.bgrid{display:flex;flex-wrap:wrap;gap:8px}
+.bchip{border:1px solid var(--line);background:transparent;border-radius:12px;padding:9px 14px;font-size:14.5px;color:var(--ink)}
+.bchip[aria-pressed="true"]{background:var(--btn);border-color:var(--btn);color:var(--btn-ink);font-weight:700}
+.bnew{display:flex;gap:8px;margin-top:12px}
+.bnew input{flex:1;min-width:0;border:1px solid var(--line);background:var(--sunk);border-radius:12px;padding:9px 12px;font-size:15px}
+.bnew button{border:none;background:var(--btn);color:var(--btn-ink);border-radius:12px;padding:0 16px;font-weight:700}
+.sact{display:flex;align-items:center;gap:12px;width:100%;border:none;background:var(--sunk);border-radius:14px;padding:12px 14px;margin-top:14px;font-size:15px;color:var(--ink);text-align:left}
+.dshead{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.dshead h3{flex:1;margin:0}
+.dshead button{width:38px;height:38px;border-radius:12px;border:none;background:var(--sunk);font-size:18px;color:var(--ink)}
+.dsgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.dsw{font-size:12px;color:var(--muted);padding:4px 0}
+.dsw.sat,.dsd.sat{color:var(--meet)}
+.dsw.sun,.dsd.sun{color:var(--warn)}
+.dsd{height:42px;border:none;background:transparent;border-radius:50%;font-size:15px;color:var(--ink)}
+.dsd[data-past]{opacity:.4}
+.dsd.today{box-shadow:inset 0 0 0 1.5px var(--btn)}
+.dsd.sel{background:var(--btn);color:var(--btn-ink)!important;font-weight:700;opacity:1}
+.dsquick{display:flex;gap:8px;margin-top:12px}
+.dsquick button{flex:1;border:none;background:var(--sunk);border-radius:12px;padding:11px;font-size:14.5px;color:var(--ink)}
+.rdate{width:34px;height:34px;border-radius:10px;border:none;background:transparent;color:var(--muted);display:grid;place-items:center;flex:none;margin-right:-4px}
+.rdate.on{background:var(--sunk);color:var(--btn)}
+.rt small.late{color:var(--warn)}
+.wkwrap{padding:0 2px 10px 34px}
+.wkstrip{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
+.wk{border:none;background:var(--sunk);border-radius:10px;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:1px;color:var(--ink);min-width:0}
+.wk b{font-size:11px;font-weight:600;color:var(--muted)}
+.wk span{font-size:14px;font-weight:600}
+.wk.sat span{color:var(--meet)}
+.wk.sun span{color:var(--warn)}
+.wk.sel{background:var(--btn)}
+.wk.sel b,.wk.sel span{color:var(--btn-ink)}
+.wk.more span{letter-spacing:-1px}
+.lmore{display:block;width:100%;border:none;background:transparent;color:var(--btn);font-size:14px;padding:12px;text-align:center}
+
+/* ---------- composer ---------- */
+.composer{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:8px 14px calc(14px + env(safe-area-inset-bottom,0px));pointer-events:none}
+.pill{max-width:720px;margin:0 auto;background:var(--surface);border-radius:28px;box-shadow:0 0 0 1px var(--line),0 6px 24px rgba(0,0,0,.06);padding:14px 12px 12px;pointer-events:auto}
+.pill textarea{width:100%;resize:none;border:none;background:transparent;padding:4px 10px;min-height:30px;max-height:34vh;font-size:17px;line-height:1.5;display:block;outline:none}
+.pill textarea::placeholder{color:var(--muted)}
+.thumbs{display:flex;gap:8px;margin:8px 8px 0;flex-wrap:wrap}
+.thumbs:empty{display:none}
+.thumb{position:relative;width:58px;height:58px;border-radius:12px;overflow:hidden;background:var(--sunk)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb button{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;font-size:13px;line-height:22px;padding:0}
+.bar{display:flex;align-items:center;gap:8px;margin-top:10px}
+.cbtn{width:46px;height:46px;border-radius:50%;border:none;background:var(--sunk);display:grid;place-items:center;flex:none}
+.cbtn.rec{background:var(--btn);color:var(--btn-ink);animation:micpulse 1.4s ease-out infinite}
+@keyframes micpulse{0%{box-shadow:0 0 0 0 rgba(36,87,230,.45)}100%{box-shadow:0 0 0 12px rgba(36,87,230,0)}}
+@media (prefers-reduced-motion:reduce){.cbtn.rec{animation:none}}
+.hint{flex:1;min-width:0;font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-left:4px}
+.go{height:46px;border-radius:23px;border:none;background:var(--btn);color:var(--btn-ink);font-weight:700;font-size:15.5px;padding:0 18px 0 16px;display:flex;align-items:center;gap:7px;flex:none;transition:opacity .15s}
+.go:disabled{opacity:.28;cursor:default}
+
+/* ---------- drawer ---------- */
+.drawer{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);transform:translateX(-100%);transition:transform .25s ease;visibility:hidden}
+.drawer.on{transform:none;visibility:visible}
+@media (prefers-reduced-motion:reduce){.drawer{transition:none}}
+.dwrap{max-width:720px;margin:0 auto;padding:12px 16px 48px}
+.dtop{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.dtop h2{font-size:22px;margin:0;letter-spacing:-0.03em;flex:1}
+.dtop small{color:var(--muted);font-size:13px;font-weight:400;margin-left:6px}
+.search{width:100%;border:none;box-shadow:0 0 0 1px var(--line);background:var(--surface);border-radius:14px;padding:11px 14px;margin-bottom:12px}
+.search::placeholder{color:var(--muted)}
+.sleep{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1.5px dashed var(--warn);background:transparent;border-radius:14px;padding:10px 14px;margin-bottom:12px;color:var(--ink)}
+.sleep b{color:var(--warn)}
+.sleep small{margin-left:auto;color:var(--muted);white-space:nowrap}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:8px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:none;box-shadow:0 0 0 1px var(--line);background:var(--surface);border-radius:999px;padding:6px 13px;font-size:14px;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--btn);color:var(--btn-ink);box-shadow:none}
+.chip.client{font-size:13px;padding:4px 11px;background:transparent}
+.notice{font-size:13px;color:var(--muted);background:var(--sunk);border-radius:10px;padding:8px 12px;margin:4px 0 12px}
+.list{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.card{background:var(--surface);border-radius:16px;border-left:4px solid var(--c,var(--raw));padding:12px 14px 12px 13px;box-shadow:0 0 0 1px var(--line)}
+.card.done{opacity:.55}
+.card-head{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.cat{background:var(--cbg,var(--raw-bg));color:var(--c,var(--raw));font-weight:700;border-radius:6px;padding:1px 7px;font-size:12px}
+.who{color:var(--ink);font-weight:500}
+.when{margin-left:auto}
+.open-btn{all:unset;display:block;width:100%;cursor:pointer;border-radius:8px}
+.title{font-weight:700;font-size:16.5px;margin:6px 0 2px;letter-spacing:-0.01em}
+.summary{color:var(--muted);font-size:14.5px;margin:0}
+.rawtext{white-space:pre-wrap;font-size:15px;margin:6px 0 0}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:13px}
+.mp{border-radius:8px;padding:3px 8px;background:var(--sunk);color:var(--muted)}
+.working{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13.5px;margin-top:6px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--hl);animation:blink 1s infinite alternate;flex:none}
+@keyframes blink{to{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}}
+.detail{border-top:1px solid var(--line);margin-top:12px;padding-top:12px;display:flex;flex-direction:column;gap:14px}
+.sec-t{font-size:12.5px;color:var(--muted);margin:0 0 6px}
+.check{display:flex;flex-direction:column;gap:2px}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 2px;font-size:15px;cursor:pointer}
+.check input{width:19px;height:19px;margin-top:2px;accent-color:var(--todo);flex:none}
+.check label.ok span{text-decoration:line-through;color:var(--muted)}
+.cal{display:flex;align-items:center;gap:10px;background:var(--sunk);border-radius:12px;padding:10px 12px;font-size:14.5px}
+.cal a{margin-left:auto;background:var(--btn);color:var(--btn-ink);text-decoration:none;border-radius:999px;padding:7px 14px;font-size:13.5px;white-space:nowrap}
+.cal a.added{background:transparent;color:var(--muted);box-shadow:0 0 0 1px var(--line)}
+.catpick{display:flex;gap:6px;flex-wrap:wrap}
+.catpick button{border:1px solid var(--line);background:transparent;border-radius:8px;padding:5px 10px;font-size:13.5px}
+.catpick button[aria-pressed="true"]{background:var(--cbg);color:var(--c);border-color:var(--c);font-weight:700}
+.clientin{width:100%;border:1px solid var(--line);background:var(--sunk);border-radius:8px;padding:7px 10px;font-size:14.5px}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:12.5px;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.act{border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 14px;font-size:14px}
+.act.primary{background:var(--btn);color:var(--btn-ink);border-color:var(--btn);font-weight:700}
+.act.danger{color:var(--warn)}
+.act.danger.armed{background:var(--warn);color:#fff;border-color:var(--warn)}
+.err{font-size:13px;color:var(--warn);margin-top:6px}
+.empty{text-align:center;color:var(--muted);padding:48px 12px;font-size:15px}
+.empty b{display:block;color:var(--ink);font-size:18px;margin-bottom:6px}
+.toast{position:fixed;left:50%;bottom:calc(170px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--btn);color:var(--btn-ink);padding:9px 16px;border-radius:12px;font-size:14px;z-index:60;max-width:90vw;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- menu & views ---------- */
+.vtop{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.vtop h2{font-size:22px;margin:0;letter-spacing:-0.03em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vtop .tbtn{border:none;background:transparent;color:var(--btn);font-size:14px;font-weight:500;padding:6px 4px;white-space:nowrap}
+.menu{display:flex;flex-direction:column;gap:8px}
+.mi{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:none;background:var(--surface);box-shadow:0 0 0 1px var(--line);border-radius:16px;padding:14px 16px;color:var(--ink)}
+.mi .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--sunk);color:var(--btn);flex:none}
+.mi .tx{flex:1;min-width:0}
+.mi .tx b{display:block;font-size:16px;font-weight:700;letter-spacing:-0.01em}
+.mi .tx small{display:block;color:var(--muted);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mi .n{font-size:14px;font-weight:700;color:var(--muted);min-width:24px;text-align:right}
+.mi .n.hot{color:var(--btn)}
+.ord{display:flex;gap:4px;flex:none}
+.ord button{width:34px;height:34px;border-radius:10px;border:none;background:var(--sunk);display:grid;place-items:center;color:var(--ink)}
+.ord button:disabled{opacity:.3}
+.msec{font-size:13px;color:var(--muted);margin:22px 4px 8px}
+.minigrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.ms{display:flex;align-items:center;gap:8px;border:none;background:var(--surface);box-shadow:0 0 0 1px var(--line);border-radius:14px;padding:12px 14px;text-align:left;color:var(--ink);font-size:15px}
+.ms i{width:9px;height:9px;border-radius:50%;background:var(--c);flex:none}
+.ms span{flex:1}
+.ms em{font-style:normal;color:var(--muted);font-size:13px}
+
+.mx{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cell{background:var(--surface);box-shadow:0 0 0 1px var(--line);border-radius:16px;padding:10px;min-height:150px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.cell h3{margin:0 0 2px;font-size:14px;letter-spacing:-0.01em;display:flex;align-items:center;gap:6px}
+.cell h3 small{font-weight:400;color:var(--muted);font-size:11.5px;display:block}
+.cell h3 em{font-style:normal;margin-left:auto;color:var(--muted);font-size:12.5px}
+.cell.q1{background:linear-gradient(var(--qbg),var(--qbg)),var(--surface);--qbg:rgba(220,70,50,.07)}
+.cell.q2{--qbg:rgba(36,87,230,.07);background:linear-gradient(var(--qbg),var(--qbg)),var(--surface)}
+.ax{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin:0 2px 6px}
+.mxi{border:none;background:var(--sunk);border-radius:10px;padding:7px 8px;text-align:left;font-size:13px;line-height:1.35;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;border-left:3px solid var(--c)}
+.mxe{font-size:12.5px;color:var(--muted);padding:4px 2px}
+.qpick{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.qpick button{border:1px solid var(--line);background:transparent;border-radius:10px;padding:7px 8px;font-size:13px;text-align:left}
+.qpick button[aria-pressed="true"]{background:var(--btn);color:var(--btn-ink);border-color:var(--btn);font-weight:700}
+
+.seg{display:inline-flex;background:var(--sunk);border-radius:999px;padding:3px;margin-bottom:12px}
+.seg button{border:none;background:transparent;border-radius:999px;padding:7px 16px;font-size:14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.graph{background:var(--surface);box-shadow:0 0 0 1px var(--line);border-radius:18px;overflow:hidden}
+.graph svg{width:100%;height:auto;touch-action:manipulation}
+.graph .nd{cursor:pointer}
+.graph text{fill:var(--ink);font-size:9.5px;pointer-events:none;font-family:inherit}
+.gcanvas{position:relative;margin:0 -16px;height:60vh;overflow:hidden;background:#FFFFFF;border-top:1px solid var(--line);touch-action:none;--gl:#D5DDEA;--gt:#2A3550;--gbg:#FFFFFF}
+.gcanvas.dark{--gl:rgba(170,155,255,.22);--gt:#E4E0FF;--gbg:#090B16;border-top-color:#090B16;
+  background:radial-gradient(ellipse at 50% 45%, rgba(110,88,220,.22), transparent 62%), #090B16}
+.gcanvas.dark::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;
+  background-image:radial-gradient(1px 1px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 72% 12%,#cfc6ff,transparent),radial-gradient(1px 1px at 38% 66%,#fff,transparent),radial-gradient(1px 1px at 88% 58%,#bfb3ff,transparent),radial-gradient(1px 1px at 22% 84%,#fff,transparent),radial-gradient(1px 1px at 58% 92%,#d9d2ff,transparent),radial-gradient(1px 1px at 92% 86%,#fff,transparent),radial-gradient(1px 1px at 6% 52%,#cfc6ff,transparent),radial-gradient(1px 1px at 48% 30%,#fff,transparent),radial-gradient(1px 1px at 80% 34%,#fff,transparent);
+  background-size:260px 260px}
+.gcanvas .halo{fill:none;stroke-dasharray:1.5 4;opacity:.7}
+.gcanvas.dark .halo{animation:halo 3.2s ease-in-out infinite}
+@keyframes halo{0%,100%{opacity:.35}50%{opacity:.85}}
+.gcanvas.dark .gn{filter:url(#gglow)}
+.gcanvas text.hub{font-weight:700}
+@media (prefers-reduced-motion:reduce){.gcanvas.dark .halo{animation:none}}
+.homeb{width:42px;height:42px;border-radius:50%;border:none;background:var(--sunk);color:var(--ink);display:grid;place-items:center;flex:none;align-self:center;margin-right:2px}
+.gcanvas svg{display:block;width:100%;height:100%;cursor:grab;user-select:none;-webkit-user-select:none}
+.gcanvas svg:active{cursor:grabbing}
+.gcanvas text{fill:var(--gt);pointer-events:none;font-family:inherit;paint-order:stroke;stroke:var(--gbg);stroke-width:3px;stroke-linejoin:round}
+.gcanvas.far text:not(.hub){display:none}
+.gcanvas.mid text.minor{display:none}
+.gtools{position:absolute;right:12px;bottom:14px;display:flex;flex-direction:column;gap:8px}
+.gtools button{width:42px;height:42px;border-radius:50%;border:none;background:var(--surface);box-shadow:0 2px 10px rgba(10,20,45,.14);display:grid;place-items:center;font-size:18px;color:var(--ink)}
+.gcanvas.dark .gtools button{background:#2A2C35;color:#E6E8EE;box-shadow:none}
+.glegend{position:absolute;left:12px;bottom:14px;display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--muted);background:rgba(255,255,255,.85);border-radius:10px;padding:8px 10px;pointer-events:none}
+.gcanvas.dark .glegend{background:rgba(30,31,38,.85);color:#9AA0AE}
+.glegend span{display:flex;align-items:center;gap:6px}
+.glegend i{display:inline-block;width:16px;border-top:2px solid var(--gl)}
+.ghint{position:absolute;left:0;right:0;top:10px;text-align:center;font-size:12px;color:var(--muted);pointer-events:none}
+.editraw{width:100%;min-height:90px;resize:vertical;border:1px solid var(--line);background:var(--sunk);border-radius:10px;padding:9px 11px;font-size:15px;line-height:1.5}
+.edittitle{width:100%;border:1px solid var(--line);background:var(--sunk);border-radius:10px;padding:8px 11px;font-size:15.5px;font-weight:700;margin-bottom:8px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:10px 4px}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:18px;height:0;border-top:2px solid var(--muted)}
+
+.tree{display:flex;flex-direction:row;align-items:flex-start;gap:14px;overflow-x:auto;margin:0 -16px;padding:2px 16px 24px;scroll-snap-type:x proximity;scrollbar-width:thin}
+.tree .br{flex:0 0 232px;scroll-snap-align:start}
+.tree .leaf span{white-space:normal;line-height:1.35}
+.tree .leaves li{padding:5px 0}
+.area{margin-bottom:6px}
+.area-h{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;margin:14px 2px 8px}
+.area-h em{font-style:normal;font-weight:400;color:var(--muted);font-size:13px}
+.adot{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none;margin-right:6px}
+.ssec .adot,.sarea .adot{margin-right:8px}
+.sarea{display:flex;align-items:center;font-size:13px;color:var(--muted);margin:12px 0 6px}
+.apick{display:flex;gap:6px}
+.apick button{flex:1;border:1px solid var(--line);background:transparent;border-radius:10px;padding:7px 4px;font-size:13.5px;color:var(--ink)}
+.apick button[aria-pressed="true"]{background:var(--btn);border-color:var(--btn);color:var(--btn-ink);font-weight:700}
+#mpage.dark{background:#090B16;--bg:#090B16;--surface:#141729;--sunk:#1C2036;--ink:#E7E9EF;--muted:#9AA0AE;--line:#353946;color:var(--ink)}
+#mpage.dark .seg button[aria-pressed="true"]{box-shadow:none}
+#mpage.dark .gcanvas{border-top-color:#1C1D23}
+.gthemebtn{margin-left:auto;align-self:center;border:none;background:var(--sunk);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:13.5px;display:flex;align-items:center;gap:6px}
+.br{background:var(--surface);box-shadow:0 0 0 1px var(--line);border-radius:16px;padding:12px 14px}
+.br-h{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15.5px}
+.br-h .root{width:10px;height:10px;border-radius:50%;background:var(--btn);flex:none}
+.br-h em{font-style:normal;color:var(--muted);font-weight:400;font-size:13px;margin-left:auto}
+.leaves{list-style:none;margin:8px 0 0 4px;padding:0 0 0 16px;border-left:2px solid var(--line)}
+.leaves li{position:relative;padding:3px 0}
+.leaves li::before{content:"";position:absolute;left:-16px;top:50%;width:12px;border-top:2px solid var(--line)}
+.leaf{border:none;background:transparent;text-align:left;padding:4px 0;font-size:14.5px;color:var(--ink);display:flex;align-items:center;gap:8px;width:100%}
+.leaf i{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.leaf span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.leaf small{color:var(--btn);font-size:12px;white-space:nowrap}
+.links{display:flex;flex-direction:column;gap:6px}
+.lk{display:flex;align-items:center;gap:8px;border:none;background:var(--sunk);border-radius:10px;padding:8px 10px;text-align:left;font-size:14px;color:var(--ink)}
+.lk i{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.lk span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lk small{color:var(--muted);font-size:12px;white-space:nowrap}
+.clist{display:flex;flex-direction:column;gap:8px}
+
+/* ---------- side panel (1/3) ---------- */
+.scrim{position:fixed;inset:0;z-index:35;background:rgba(10,20,45,.28);opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.on{opacity:1;pointer-events:auto}
+.side{position:fixed;top:0;bottom:0;left:0;z-index:36;width:min(84vw,360px);max-width:none;background:var(--surface);box-shadow:4px 0 24px rgba(10,20,45,.10);transform:translateX(-102%);visibility:hidden;transition:transform .22s ease,visibility .22s;overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 16px) 8px calc(env(safe-area-inset-bottom,0px) + 16px);border-radius:0 22px 22px 0}
+.side.on{transform:none;visibility:visible}
+@media (prefers-reduced-motion:reduce){.side,.scrim{transition:none}}
+.shead{text-align:center;margin:2px 0 12px}
+.sitem{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;border:none;background:transparent;border-radius:14px;padding:9px 4px;color:var(--ink);font-size:13px;font-weight:500;text-align:center}
+.sitem:active{background:var(--sunk)}
+.sitem .ic{position:relative;width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:var(--sunk);color:var(--btn);flex:none}
+.sitem .cnt{position:absolute;top:-5px;right:-8px;min-width:18px;height:18px;border-radius:9px;background:var(--btn);color:var(--btn-ink);font-size:10.5px;line-height:18px;padding:0 5px;font-weight:700}
+.sitem .lb{line-height:1.25}
+.sord{display:flex;gap:4px}
+.sord button{width:30px;height:26px;border-radius:8px;border:none;background:var(--sunk);font-size:14px;color:var(--ink)}
+.sord button:disabled{opacity:.3}
+.sdiv{height:1px;background:var(--line);margin:10px 8px}
+.scat{display:flex;align-items:center;gap:8px;width:100%;border:none;background:transparent;border-radius:10px;padding:8px 10px;font-size:13.5px;color:var(--ink);text-align:left}
+.scat:active{background:var(--sunk)}
+.scat i{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.scat span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scat em{font-style:normal;color:var(--muted);font-size:12px}
+.ssec{font-size:13px;color:var(--muted);margin:6px 14px 6px;display:flex;align-items:center}
+.ssec button{margin-left:auto;border:none;background:transparent;color:var(--btn);font-size:13px;padding:4px 2px}
+.srow{display:flex;align-items:center;gap:14px;width:100%;border:none;background:transparent;border-radius:14px;padding:12px 14px;font-size:16px;color:var(--ink);text-align:left}
+.srow:active,.srow.on{background:var(--sunk)}
+.srow svg{flex:none;color:var(--muted)}
+.srow span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.srow em{font-style:normal;font-size:13px;color:var(--muted)}
+.srow i{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none;margin:0 4px}
+.snew{display:flex;gap:8px;margin:4px 8px 8px}
+.snew input{flex:1;min-width:0;border:1px solid var(--line);background:var(--sunk);border-radius:12px;padding:9px 12px;font-size:15px}
+.snew button{border:none;background:var(--btn);color:var(--btn-ink);border-radius:12px;padding:0 14px;font-weight:700}
+.side{display:flex;flex-direction:column}
+.side>*{flex:none}
+.sfoot{margin-top:auto;position:sticky;bottom:0;padding:12px 6px 4px;background:linear-gradient(transparent,var(--surface) 30%);display:flex;justify-content:flex-end}
+.sfoot button{border:none;background:var(--btn);color:var(--btn-ink);border-radius:999px;padding:13px 20px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:6px}
+.sempty{font-size:13.5px;color:var(--muted);padding:6px 14px 10px}
+.sedit{display:block;width:100%;border:none;background:transparent;color:var(--btn);font-size:13px;padding:8px 4px;text-align:center}
+@media (min-width:600px){
+  .sitem{flex-direction:row;justify-content:flex-start;gap:12px;padding:9px 10px;font-size:15px;text-align:left}
+  .sitem .lb{flex:1}
+  .scat{font-size:14.5px}
+}
+.login{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;padding:24px;text-align:center}
+.login::before{content:"";position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle at 40% 40%,var(--glow1),transparent 62%),radial-gradient(circle at 65% 60%,var(--glow2),transparent 60%);filter:blur(10px);z-index:-1}
+.login h1{font-size:30px;letter-spacing:-0.035em;line-height:1.25;margin:14px 0 10px}
+.login p{color:var(--muted);font-size:15px;margin:0 0 28px}
+.login button{display:inline-flex;align-items:center;gap:10px;border:none;background:var(--surface);box-shadow:0 0 0 1px var(--line),0 4px 18px rgba(10,20,45,.08);border-radius:999px;padding:14px 24px;font-size:16px;font-weight:600;color:var(--ink)}
+</style>
+</head>
+<body>
+
+<main class="home" id="home">
+  <div class="top">
+    <button class="round" id="menuBtn" aria-label="카테고리 열기">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h11M4 17h16"/></svg>
+      <span class="badge" id="badge" hidden></span>
+    </button>
+    <button class="round" id="searchBtn" aria-label="메모 검색">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    </button>
+  </div>
+  <section class="hero">
+    <div class="mark"><span>머릿속</span></div>
+    <h1 class="greet" id="greet">대표님, 반갑습니다</h1>
+    <p class="sub" id="sub">생각나는 대로 던져두세요.<br>나누고 챙기는 건 제가 합니다.</p>
+    <div id="homeSleep"></div>
+  </section>
+  <section class="results" id="results" aria-live="polite"></section>
+</main>
+<div class="pager" id="pager" role="tablist" aria-label="화면 전환"><button data-act="page" data-v="0" aria-label="홈" aria-pressed="true"></button><button data-act="page" data-v="1" aria-label="달력" aria-pressed="false"></button><button data-act="page" data-v="2" aria-label="마인드맵" aria-pressed="false"></button></div>
+<section class="lpage" id="cpage" aria-label="달력"><div class="cpage-wrap" id="cwrap"></div></section>
+<section class="lpage" id="mpage" aria-label="마인드맵" style="z-index:16"><div class="lwrap" id="mwrap"></div></section>
+
+<div class="composer" id="composer">
+  <div class="pill">
+    <label for="ta" class="sr">메모 입력</label>
+    <textarea id="ta" rows="1" placeholder="무엇이든 던져두세요"></textarea>
+    <div class="thumbs" id="thumbs"></div>
+    <div class="cchips" id="cchips"></div>
+    <div class="bar">
+      <button class="cbtn" id="plus" aria-label="브랜드 선택, 사진 첨부">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+      <button class="cbtn" id="calBtn" aria-label="할 일 날짜 고르기">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+      </button>
+      <input type="date" id="dateIn" style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none" tabindex="-1" aria-hidden="true">
+      <input type="file" id="file" accept="image/*" multiple hidden>
+      <div class="hint" id="hint"></div>
+      <button class="cbtn" id="mic" aria-label="음성으로 입력">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+      </button>
+      <button class="go" id="save" disabled>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        입력
+      </button>
+    </div>
+  </div>
+</div>
+
+<aside class="drawer" id="drawer" aria-label="카테고리">
+  <div class="dwrap" id="dwrap"></div>
+</aside>
+<div class="scrim" id="scrim" data-act="scrim"></div>
+<nav class="side" id="side" aria-label="카테고리"></nav>
+<div class="sheet" id="sheet" role="dialog" aria-label="브랜드 선택"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+(function(){
+  const CATS = {
+    "미팅":{c:"var(--meet)",bg:"var(--meet-bg)"},
+    "아이디어":{c:"var(--idea)",bg:"var(--idea-bg)"},
+    "할일":{c:"var(--todo)",bg:"var(--todo-bg)"},
+    "개인":{c:"var(--life)",bg:"var(--life-bg)"}
+  };
+  const QS = {
+    q1:{name:"지금 바로", sub:"급하고 중요"},
+    q2:{name:"일정 잡기", sub:"중요, 안 급함"},
+    q3:{name:"빨리 처리", sub:"급함, 덜 중요"},
+    q4:{name:"나중에", sub:"둘 다 아님"}
+  };
+  const MENU = {
+    today:{t:"오늘 처리할 것", s:"오늘 할 일 + 지금 바로 칸", ic:'<path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3.5"/>'},
+    matrix:{t:"우선순위 매트릭스", s:"급함 × 중요 4칸", ic:'<rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/>'},
+    clients:{t:"클라이언트별 모음", s:"학원·브랜드별로 묶어보기", ic:'<path d="M4 20V9l8-5 8 5v11"/><path d="M9 20v-6h6v6"/>'},
+    map:{t:"생각 연결 지도", s:"그래프 · 마인드맵", ic:'<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="8" r="2.5"/><circle cx="9" cy="18" r="2.5"/><path d="M8.2 7.2 15.6 8M7 8.4l1.4 7.2M10.8 16.5l5.8-6.4"/>'},
+    recent:{t:"최근 메모", s:"방금 던진 순서대로", ic:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>'}
+  };
+  const DEFAULT_ORDER = ["today","matrix","clients","map","recent"];
+  const SLEEP_DAYS = 3;
+  const LS_KEY = "brain-memos-v1", LS_SET = "brain-settings-v1";
+
+  let memos = [], mode = null, col = null, settings = {order:DEFAULT_ORDER.slice(), mapMode:"tree", brands:[], folderArea:{}, seeded:false};
+  let sample = null, sampleChecked = false, imgLimits = null;
+  let resolveReady; const ready = new Promise(r => resolveReady = r);
+  const writeChain = {};
+  const sessionIds = [];
+  const st = {view:"menu", stack:[], arg:null, q:"", open:null, armed:null, imgs:[], drawer:false, editOrder:false, page:0, due:null, brand:null, sheet:false, cal:null};
+
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const uid = () => (crypto.randomUUID ? crypto.randomUUID() : (Date.now().toString(36)+Math.random().toString(36).slice(2))).replace(/-/g,"").slice(0,20);
+  function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),2600); }
+  const catOf = m => CATS[m.category] || {c:"var(--raw)",bg:"var(--raw-bg)"};
+  const active = () => memos.filter(m => !m.done);
+  const ymdKST = d => new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Seoul",year:"numeric",month:"2-digit",day:"2-digit"}).format(d||new Date());
+
+  function greet(){
+    const h = Number(new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Seoul",hour:"2-digit",hour12:false}).format(new Date()));
+    let g = "대표님, 늦게까지 수고가 많으십니다";
+    if(h>=5 && h<11) g = "대표님, 좋은 아침입니다";
+    else if(h>=11 && h<17) g = "대표님, 좋은 오후입니다";
+    else if(h>=17 && h<23) g = "대표님, 좋은 저녁입니다";
+    $("greet").textContent = g;
+  }
+
+  /* ---------- storage ---------- */
+  function applySettings(s){
+    if(!s) return;
+    const order = Array.isArray(s.order) ? s.order.filter(k => MENU[k]) : [];
+    DEFAULT_ORDER.forEach(k => { if(!order.includes(k)) order.push(k); });
+    settings = {order, mapMode: s.mapMode==="graph" ? "graph" : "tree", graphDark: !!s.graphDark, brands: Array.isArray(s.brands) ? [...new Set(s.brands.map(String).filter(Boolean))].slice(0,80) : [], folderArea: (s.folderArea && typeof s.folderArea==="object") ? s.folderArea : {}, seeded: !!s.seeded};
+  }
+  function loadLocal(){
+    try{ memos = JSON.parse(localStorage.getItem(LS_KEY)||"[]"); }catch(e){ memos=[]; }
+    try{ applySettings(JSON.parse(localStorage.getItem(LS_SET)||"null")); }catch(e){}
+  }
+  function saveLocal(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(memos)); }catch(e){ toast("이 기기에 저장 공간이 부족합니다."); } }
+  let fbAuth = null;
+  function fbReady(){ const c = window.FIREBASE_CONFIG; return !!(c && c.apiKey && !/^여기/.test(c.apiKey) && window.firebase); }
+  function showLogin(msg){
+    const el = document.createElement("div"); el.className = "login";
+    el.innerHTML = `<div class="login-in"><div class="mark"><span>머릿속</span></div><h1>대표님의 머릿속을<br>한곳에</h1><p>${msg || "구글 계정으로 로그인하면 폴드와 맥북에서<br>같은 메모가 이어집니다."}</p><button id="gLogin"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Google로 계속하기</button></div>`;
+    document.body.appendChild(el);
+    el.querySelector("#gLogin").onclick = async () => {
+      const prov = new firebase.auth.GoogleAuthProvider();
+      try{ await fbAuth.signInWithPopup(prov); location.reload(); }
+      catch(e){ if(e && (e.code==="auth/popup-blocked" || e.code==="auth/operation-not-supported-in-this-environment" || e.code==="auth/popup-closed-by-user")) fbAuth.signInWithRedirect(prov); else toast("로그인하지 못했습니다. 다시 시도해 주세요."); }
+    };
+  }
+  async function setupFirebase(){
+    try{
+      if(!firebase.apps.length) firebase.initializeApp(window.FIREBASE_CONFIG);
+      fbAuth = firebase.auth(); const fdb = firebase.firestore();
+      try{ await fdb.enablePersistence({synchronizeTabs:true}); }catch(e){}
+      try{ await fbAuth.getRedirectResult(); }catch(e){}
+      const user = await new Promise(res => { const un = fbAuth.onAuthStateChanged(u => { un(); res(u); }); });
+      if(!user){ showLogin(); return true; }
+      st.fbUser = user.email || user.displayName || "로그인됨";
+      col = fdb.collection("users").doc(user.uid).collection("memos"); mode = "db";
+      col.onSnapshot(snap => {
+        const list = [];
+        snap.docs.forEach(d => { if(d.id === "_settings") applySettings(d.data()); else if(d.id[0] !== "_") list.push(Object.assign({}, d.data(), {id:d.id})); });
+        memos = list; st.loaded = true; render();
+      }, () => toast("저장소 연결이 끊겼습니다. 새로고침해 주세요."));
+      resolveReady(); return true;
+    }catch(e){ console.error(e); toast("Firebase 연결에 실패해 이 기기에만 저장합니다."); return false; }
+  }
+  async function setupStore(){
+    if(fbReady()){ const ok = await setupFirebase(); if(ok) return; }
+    try{
+      if(window.claude && window.claude.use){
+        const [db,user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+        if(db && user){
+          const id = await user.id();
+          if(id){
+            col = db.collection("data/users/"+id); mode = "db";
+            col.onSnapshot(snap => {
+              const list = [];
+              snap.docs.forEach(d => { if(d.id === "_settings") applySettings(d.data()); else if(d.id[0] !== "_") list.push(Object.assign({}, d.data(), {id:d.id})); });
+              memos = list; st.loaded = true; render();
+            }, () => toast("저장소 연결이 끊겼습니다. 새로고침해 주세요."));
+            resolveReady(); return;
+          }
+        }
+      }
+    }catch(e){}
+    mode = "local"; loadLocal(); st.loaded = true; render(); resolveReady();
+  }
+  function clean(m){ const o={}; for(const k in m){ if(k!=="id" && m[k]!==undefined) o[k]=m[k]; } return JSON.parse(JSON.stringify(o)); }
+  function queue(id, fn){ writeChain[id] = (writeChain[id]||Promise.resolve()).then(fn).catch(e => toast(e && e.code==="quota_exceeded" ? "저장 공간이 가득 찼습니다. 완료된 메모를 지워주세요." : "저장하지 못했습니다. 다시 시도해 주세요.")); }
+  async function put(m){
+    await ready;
+    const i = memos.findIndex(x => x.id===m.id); if(i>=0) memos[i]=m; else memos.push(m);
+    if(mode==="db"){ const data = clean(m); queue(m.id, () => col.doc(m.id).set(data)); } else saveLocal();
+    render();
+  }
+  async function saveSettings(){
+    await ready;
+    if(mode==="db"){ const data = JSON.parse(JSON.stringify(settings)); queue("_settings", () => col.doc("_settings").set(data)); }
+    else { try{ localStorage.setItem(LS_SET, JSON.stringify(settings)); }catch(e){} }
+  }
+  async function remove(id){
+    await ready;
+    memos = memos.filter(x => x.id!==id);
+    const si = sessionIds.indexOf(id); if(si>=0) sessionIds.splice(si,1);
+    if(mode==="db") queue(id, () => col.doc(id).delete()); else saveLocal();
+    render();
+  }
+  const getMemo = id => memos.find(x => x.id===id);
+
+  /* ---------- AI ---------- */
+  async function setupSample(){
+    try{
+      if(window.claude && window.claude.use){
+        sample = await window.claude.use("sample");
+        if(sample && sample.limits){ try{ const l = await sample.limits(); imgLimits = l && l.images ? l.images : null; }catch(e){} }
+      }
+    }catch(e){ sample = null; }
+    if(!sample){ const k = getKey(); if(k){ sample = apiSample(k); imgLimits = {maxCount:4}; } }
+    sampleChecked = true; render();
+  }
+  const KEY_LS = "brain-ai-key";
+  function getKey(){ try{ return localStorage.getItem(KEY_LS) || ""; }catch(e){ return ""; } }
+  function blobB64(b){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(String(r.result).split(",")[1]); r.onerror=rej; r.readAsDataURL(b); }); }
+  function apiSample(key){
+    return { async json(prompt, opts){
+      opts = opts || {};
+      const content = [];
+      for(const b of (opts.images||[])) content.push({type:"image", source:{type:"base64", media_type:"image/jpeg", data: await blobB64(b)}});
+      content.push({type:"text", text: prompt + "\n\n반드시 JSON 객체 하나만 출력하라. 설명이나 코드 블록 표시 없이."});
+      let res;
+      try{
+        res = await fetch("https://api.anthropic.com/v1/messages", {method:"POST", headers:{
+          "content-type":"application/json", "x-api-key":key, "anthropic-version":"2023-06-01", "anthropic-dangerous-direct-browser-access":"true"},
+          body: JSON.stringify({model: opts.modelTier==="quick" ? "claude-haiku-5-5" : "claude-sonnet-5-5", max_tokens:1500, messages:[{role:"user", content}]})});
+      }catch(e){ throw {code:"network"}; }
+      if(res.status===401 || res.status===403) throw {code:"bad_key"};
+      if(res.status===429) throw {code:"rate_limited"};
+      if(!res.ok) throw {code:"api_error"};
+      const d = await res.json();
+      const t = (d.content||[]).filter(x=>x.type==="text").map(x=>x.text).join("").replace(/```json|```/g,"").trim();
+      const i = t.indexOf("{"), j = t.lastIndexOf("}");
+      try{ return JSON.parse(t.slice(i, j+1)); }catch(e){ throw {code:"invalid_json"}; }
+    }};
+  }
+  function renderKeySheet(){
+    const has = !!getKey();
+    $("sheet").innerHTML = `<div class="grab"></div><h3>AI 설정</h3>
+      <p>Anthropic API 키를 넣으면 자동 분류·체크리스트·연결이 켜집니다. 키는 이 기기 브라우저에만 저장되고, 페이지 주소를 공유해도 같이 가지 않습니다.</p>
+      <div class="bnew"><input id="keyIn" type="password" placeholder="${has?"저장된 키 있음 · 바꾸려면 새로 입력":"sk-ant-로 시작하는 키"}" autocomplete="off"><button data-act="keySave">저장</button></div>
+      ${has?`<button class="sact" data-act="keyDel">AI 키 지우기</button>`:""}
+      <button class="sact" data-act="sheetClose">닫기</button>`;
+  }
+  function openKeySheet(){ st.sheet=true; renderKeySheet(); $("sheet").classList.add("on"); $("scrim").classList.add("on"); }
+  function errCopy(code){
+    return ({
+      not_granted:"AI 사용을 허용하지 않아 정리 없이 저장했습니다.",
+      rate_limited:"AI 요청이 많아 잠시 쉬는 중입니다. 조금 뒤 다시 정리해 주세요.",
+      invalid_json:"AI 답을 읽지 못했습니다. 다시 정리를 눌러주세요.",
+      images_unavailable:"이 화면에서는 사진을 AI에 보낼 수 없습니다.",
+      image_rejected:"사진 형식이나 크기 때문에 읽지 못했습니다.",
+      bad_key:"AI 키가 맞지 않습니다. 메뉴의 AI 설정에서 확인해 주세요.",
+      network:"인터넷 연결을 확인해 주세요. 메모는 저장됐습니다."
+    })[code] || "AI 정리에 실패했습니다. 다시 정리를 눌러주세요.";
+  }
+  function nowKST(){
+    const d = new Date();
+    const wd = new Intl.DateTimeFormat("ko-KR",{timeZone:"Asia/Seoul",weekday:"long"}).format(d);
+    const hm = new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Seoul",hour:"2-digit",minute:"2-digit"}).format(d);
+    return `${ymdKST(d)} ${wd} ${hm}`;
+  }
+  function buildPrompt(m, nImg){
+    const clients = [...new Set(memos.map(x=>x.client).filter(Boolean))].slice(0,40);
+    const others = memos.filter(x => x.id!==m.id && x.title).sort((a,b)=>b.createdAt-a.createdAt).slice(0,40)
+      .map(x => `${x.id} | ${x.category||"-"} | ${x.client||"-"} | ${x.title}`).join("\n");
+    return `너는 학원·브랜드 마케팅 회사 대표의 메모를 정리하는 비서다. 아래 메모${nImg ? `와 첨부한 사진 ${nImg}장(카톡 캡처, 화이트보드, 문서 사진 등)` : ""}을 읽고 JSON 객체 하나로만 답해라.
+
+현재 한국 시간: ${nowKST()}
+이 메모의 할 일 날짜: ${m.due || "오늘"}${m.brandFixed && m.client ? `
+이 메모의 폴더는 "${m.client}"(${AREA_LABEL[folderAreaOf(m.client)]})로 정해져 있다. client 필드에 그대로 써라.` : ""}
+폴더 목록 — 업무: ${foldersByArea()["업무"].join(", ")||"(없음)"} / 내 브랜딩: ${foldersByArea()["브랜딩"].join(", ")||"(없음)"} / 개인: ${foldersByArea()["개인"].join(", ")||"(없음)"}
+이미 있는 클라이언트 이름: ${clients.length ? clients.join(", ") : "(없음)"}
+같은 고객이면 위 표기를 그대로 써라.
+
+기존 메모 목록 (id | 분류 | 클라이언트 | 제목):
+${others || "(없음)"}
+
+필드:
+- title: 15자 안팎의 짧은 제목
+- category: "미팅", "아이디어", "할일", "개인" 중 하나. 고객 상담·미팅 기록은 미팅, 콘텐츠·마케팅·사업 아이디어는 아이디어, 해야 할 일과 약속은 할일, 그 외 생각·영감·사적인 메모는 개인.
+- area: "업무", "브랜딩", "개인" 중 하나. 업무=고객(학원·브랜드) 일, 브랜딩=대표 자신의 회사 BIUP와 개인 브랜딩·자기 콘텐츠, 개인=집안일·가족·아이·건강·사적인 일
+- client: 이 메모가 들어갈 폴더 이름. 업무면 고객 학원·브랜드 이름, 브랜딩이면 BIUP 등, 개인이면 집안일·아빠로서·아주 같은 생활 폴더. 위 폴더 목록에 맞는 게 있으면 그 이름을 그대로 쓰고, 없으면 짧고 일반적인 새 폴더 이름(예: 건강, 쇼핑, 가족)을 만들어라. 정말 애매하면 null
+- summary: 핵심을 1~2문장으로
+- tags: 짧은 키워드 최대 4개. 기존 메모와 같은 주제면 같은 단어를 써라
+- checklist: 문자열 배열. 아이디어면 바로 실행할 수 있는 구체적 단계 3~6개, 미팅이면 후속 조치가 있을 때만, 할일이면 세부 단계가 필요할 때만. 그 외에는 빈 배열
+- event: 날짜나 시간이 정해진 약속·마감이면 {"title":"...","date":"YYYY-MM-DD","time":"HH:MM 또는 null","minutes":60}. "내일", "다음 주 화요일" 같은 표현은 현재 시간 기준으로 계산. 없으면 null
+- quadrant: category가 할일 또는 아이디어일 때만 아래 넷 중 하나, 그 외에는 null. "q1"=급하고 중요(마감이 가깝거나 매출·고객과 직결), "q2"=중요하지만 급하지 않음(사업 성장, 기획), "q3"=급하지만 덜 중요(잡무, 연락, 남에게 맡길 수 있음), "q4"=급하지도 중요하지도 않음
+- related: 기존 메모 목록 중 이 메모와 같은 프로젝트로 이어지거나, 이 아이디어를 실행하는 작업이거나, 이 작업의 출발이 된 아이디어인 메모의 id 배열(최대 5개). 단순히 같은 클라이언트라는 이유만으로는 넣지 마라. 없으면 []
+- extracted: 사진이 있으면 사진 속 핵심 내용을 글로 정리, 없으면 ""
+
+예시: {"title":"OO학원 블로그 미팅","category":"미팅","area":"업무","client":"OO학원","summary":"...","tags":["블로그"],"checklist":["..."],"event":null,"quadrant":null,"related":[],"extracted":""}
+
+메모:
+"""
+${m.raw || "(글 없이 사진만 있음)"}
+"""`;
+  }
+  async function organize(id, blobs){
+    if(!sample) return;
+    let m = getMemo(id); if(!m) return;
+    await put(Object.assign({}, m, {status:"working", err:null}));
+    try{
+      const r = await sample.json(buildPrompt(m, blobs ? blobs.length : 0), {
+        modelTier: blobs && blobs.length ? "default" : "quick",
+        images: blobs && blobs.length ? blobs : undefined, cache:false
+      });
+      const cur = getMemo(id); if(!cur) return;
+      const cat = CATS[r && r.category] ? r.category : "개인";
+      const prev = Array.isArray(cur.checklist) ? cur.checklist : [];
+      const checklist = Array.isArray(r.checklist) ? r.checklist.filter(x => typeof x==="string" && x.trim()).slice(0,8)
+        .map(t => ({t:t.trim(), done:!!(prev.find(p=>p.t===t.trim())||{}).done})) : [];
+      let ev = null;
+      if(r.event && typeof r.event==="object" && /^\d{4}-\d{2}-\d{2}$/.test(r.event.date||"")){
+        ev = {title:String(r.event.title||r.title||"일정").slice(0,80), date:r.event.date,
+          time:/^\d{2}:\d{2}$/.test(r.event.time||"") ? r.event.time : null,
+          minutes:Number(r.event.minutes)>0 ? Math.min(Number(r.event.minutes),600) : 60, added:false};
+      }
+      let quadrant = cur.qManual ? cur.quadrant : null;
+      if(!cur.qManual && (cat==="할일" || cat==="아이디어") && QS[r.quadrant]) quadrant = r.quadrant;
+      const related = Array.isArray(r.related) ? [...new Set(r.related.map(String))].filter(x => x!==id && getMemo(x)).slice(0,5) : [];
+      await put(Object.assign({}, cur, {
+        status:"sorted", err:null, category:cat,
+        title:String(r.title||"").slice(0,60) || (cur.raw||"사진 메모").slice(0,20),
+        client:cur.brandFixed ? cur.client : (r.client ? String(r.client).slice(0,40) : null),
+        area: cur.brandFixed ? folderAreaOf(cur.client) : (AREAS.includes(r.area) ? r.area : (cat==="개인" ? "개인" : "업무")),
+        due: (!cur.dueFixed && ev) ? ev.date : (cur.due || null),
+        summary:String(r.summary||"").slice(0,300),
+        tags:Array.isArray(r.tags) ? r.tags.map(String).slice(0,4) : [],
+        checklist, event:ev, quadrant, related, extracted:String(r.extracted||"").slice(0,2000)
+      }));
+      const done2 = getMemo(id); if(done2 && done2.client && !settings.folderArea[done2.client]) setFolderArea(done2.client, done2.area);
+    }catch(e){
+      const cur = getMemo(id); if(!cur) return;
+      await put(Object.assign({}, cur, {status:cur.category ? "sorted" : "raw", err:errCopy(e && e.code)}));
+      if(e && e.code==="not_granted") sample = null;
+    }
+  }
+
+  /* ---------- helpers ---------- */
+  function ago(ts){
+    const s=(Date.now()-ts)/1000;
+    if(s<60) return "방금"; if(s<3600) return Math.floor(s/60)+"분 전"; if(s<86400) return Math.floor(s/3600)+"시간 전"; if(s<172800) return "어제";
+    const d=new Date(ts); return (d.getMonth()+1)+"/"+d.getDate();
+  }
+  const isSleeping = m => !m.done && (Date.now()-m.createdAt) > SLEEP_DAYS*86400000 && m.category!=="개인";
+  const pad = n => String(n).padStart(2,"0");
+  function calUrl(m){
+    const ev=m.event; const [y,mo,d]=ev.date.split("-").map(Number); let dates;
+    if(ev.time){
+      const [h,mi]=ev.time.split(":").map(Number);
+      const s=new Date(Date.UTC(y,mo-1,d,h,mi)), e=new Date(s.getTime()+ev.minutes*60000);
+      const f=x=>`${x.getUTCFullYear()}${pad(x.getUTCMonth()+1)}${pad(x.getUTCDate())}T${pad(x.getUTCHours())}${pad(x.getUTCMinutes())}00`;
+      dates=f(s)+"/"+f(e);
+    } else {
+      const s=new Date(Date.UTC(y,mo-1,d)), e=new Date(s.getTime()+86400000);
+      const f=x=>`${x.getUTCFullYear()}${pad(x.getUTCMonth()+1)}${pad(x.getUTCDate())}`;
+      dates=f(s)+"/"+f(e);
+    }
+    const details=[m.client ? "클라이언트: "+m.client : "", m.summary||m.raw].filter(Boolean).join("\n");
+    return "https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(ev.title)+"&dates="+dates+"&ctz=Asia%2FSeoul&details="+encodeURIComponent(details);
+  }
+  function evLabel(ev){ const [,mo,d]=ev.date.split("-").map(Number); return `${mo}월 ${d}일${ev.time ? " "+ev.time : ""}`; }
+  const byNew = (a,b) => b.createdAt-a.createdAt;
+  const dueOf = m => m.due || (m.event && m.event.date) || ymdKST(new Date(m.createdAt));
+  function dayLabel(d){
+    const t = ymdKST(), tm = ymdKST(new Date(Date.now()+86400000));
+    if(d===t) return "오늘"; if(d===tm) return "내일";
+    const [y,mo,dd] = d.split("-").map(Number); const wd = "일월화수목금토"[new Date(y,mo-1,dd).getDay()];
+    return `${mo}월 ${dd}일 (${wd})`;
+  }
+  function allBrands(){ return [...new Set([...settings.brands, ...memos.map(m=>m.client).filter(Boolean)])]; }
+  const AREAS = ["업무","브랜딩","개인"], AREA_LABEL = {"업무":"업무", "브랜딩":"내 브랜딩", "개인":"개인"};
+  const AREA_COLOR = {"업무":"#3E6FF0", "브랜딩":"#E07A3E", "개인":"#2FA57A"};
+  function folderAreaOf(name){
+    if(!name) return null;
+    if(AREAS.includes(settings.folderArea[name])) return settings.folderArea[name];
+    const m = memos.find(x => x.client===name && AREAS.includes(x.area)); return m ? m.area : "업무";
+  }
+  function areaOf(m){ if(AREAS.includes(m.area)) return m.area; if(m.client) return folderAreaOf(m.client); return m.category==="개인" ? "개인" : "업무"; }
+  function foldersByArea(){
+    const g = {"업무":[], "브랜딩":[], "개인":[]};
+    allBrands().forEach(b => g[folderAreaOf(b)].push(b));
+    return g;
+  }
+  function setFolderArea(name, area){ if(!name || !AREAS.includes(area)) return; if(settings.folderArea[name]!==area){ settings.folderArea = Object.assign({}, settings.folderArea, {[name]:area}); saveSettings(); } }
+  function seedFolders(){
+    if(settings.seeded) return;
+    if(!st.loaded){ setTimeout(seedFolders, 1000); return; }
+    const add = {"BIUP":"브랜딩","집안일":"개인","아빠로서":"개인","아주":"개인"};
+    Object.keys(add).forEach(k => { if(!settings.brands.includes(k)) settings.brands.push(k); if(!settings.folderArea[k]) settings.folderArea[k] = add[k]; });
+    settings.seeded = true; saveSettings();
+  }
+
+  /* links: same client, shared tag, AI flow */
+  function linkMap(list){
+    const map = new Map(); const ids = new Set(list.map(m=>m.id));
+    const add = (a,b,type,label) => {
+      if(a===b || !ids.has(a) || !ids.has(b)) return;
+      const k = a<b ? a+"|"+b : b+"|"+a;
+      const cur = map.get(k);
+      const rank = {flow:3, tag:2, client:1};
+      if(!cur || rank[type] > rank[cur.type]) map.set(k, {a:a<b?a:b, b:a<b?b:a, type, label});
+    };
+    const byClient = {}, byTag = {};
+    list.forEach(m => {
+      if(m.client) (byClient[m.client] = byClient[m.client]||[]).push(m.id);
+      (m.tags||[]).forEach(t => { const k=String(t).toLowerCase(); (byTag[k] = byTag[k]||[]).push(m.id); });
+      (m.related||[]).forEach(r => add(m.id, r, "flow", "이어지는 작업"));
+    });
+    Object.entries(byClient).forEach(([c,arr]) => { const a=arr.slice(0,25); for(let i=0;i<a.length;i++) for(let j=i+1;j<a.length;j++) add(a[i],a[j],"client","같은 클라이언트"); });
+    Object.entries(byTag).forEach(([t,arr]) => { const a=arr.slice(0,25); for(let i=0;i<a.length;i++) for(let j=i+1;j<a.length;j++) add(a[i],a[j],"tag","#"+t); });
+    return [...map.values()];
+  }
+  function linksFor(id){
+    return linkMap(memos).filter(e => e.a===id || e.b===id).map(e => ({m:getMemo(e.a===id?e.b:e.a), type:e.type, label:e.label}))
+      .filter(x => x.m).sort((x,y) => ({flow:0,tag:1,client:2}[x.type]) - ({flow:0,tag:1,client:2}[y.type])).slice(0,12);
+  }
+
+  /* ---------- navigation ---------- */
+  function openDrawer(view, arg){
+    st.stack = []; st.view = view || "menu"; st.arg = arg ?? null; st.open = null; st.editOrder = false;
+    st.drawer = true; $("drawer").classList.add("on"); updateComposer();
+    render(); $("drawer").scrollTop = 0;
+    if(view==="search") setTimeout(()=>{ const q=$("q"); if(q) q.focus(); }, 260);
+  }
+  function go(view, arg){
+    st.stack.push({view:st.view, arg:st.arg, open:st.open, top:$("drawer").scrollTop});
+    st.view = view; st.arg = arg ?? null; st.open = view==="memo" ? arg : null; st.armed = null;
+    render(); $("drawer").scrollTop = 0;
+  }
+  function back(){
+    const p = st.stack.pop();
+    if(!p){ closeDrawer(); return; }
+    st.view = p.view; st.arg = p.arg; st.open = p.open; st.armed = null; render(); $("drawer").scrollTop = p.top||0;
+  }
+  function closeDrawer(){ st.drawer=false; $("drawer").classList.remove("on"); updateComposer(); st.armed=null; renderHome(); }
+  const SHORT = {today:"오늘", matrix:"우선순위", clients:"클라이언트", map:"연결 지도", recent:"최근"};
+  function rowHTML(m){
+    const c = catOf(m);
+    if(m.status==="working") return `<div class="rrow" style="--c:${c.c}"><span class="dot"></span><span class="rt" style="color:var(--muted)">${esc(m.raw || "사진 메모")}</span><span class="rc" style="color:var(--muted)">정리 중</span></div>`;
+    const d = dueOf(m), t = ymdKST();
+    const late = !m.done && d < t;
+    const sub = m.err ? "다시 정리 필요" : [m.client, m.event ? evLabel(m.event) : (d!==t && !late ? dayLabel(d) : "")].filter(Boolean).join(" · ");
+    const open = st.rowOpen===m.id;
+    return `<div class="rrow ${m.done?"ok":""}" style="--c:${c.c}"><button class="rck" data-act="hdone" data-id="${m.id}" aria-label="${m.done?"완료 취소":"처리 완료"}" aria-pressed="${!!m.done}"></button><button class="rt" data-act="peek" data-id="${m.id}">${esc(m.title || m.raw || "사진 메모")}${late?`<small class="late">${Math.round((new Date(t)-new Date(d))/86400000)}일 밀림</small>`:""}${sub?`<small>${esc(sub)}</small>`:""}</button><span class="rc">${esc(m.category||"미분류")}</span>${m.done?"":`<button class="rdate ${open?"on":""}" data-act="rowDate" data-id="${m.id}" aria-label="날짜 옮기기" aria-expanded="${open}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button>`}</div>${open?`<div class="wkwrap">${weekStrip(m)}</div>`:""}`;
+  }
+  function weekStrip(m){
+    const cur = dueOf(m), t = ymdKST();
+    let h = "";
+    for(let i=0;i<7;i++){
+      const d = ymdKST(new Date(Date.now()+i*86400000)); const [y,mo,dd] = d.split("-").map(Number);
+      const w = new Date(y,mo-1,dd).getDay(), hn = dayName(d);
+      h += `<button class="wk ${d===cur?"sel":""} ${w===0||(hn&&hn.hol)?"sun":""} ${w===6?"sat":""}" data-act="moveDue" data-id="${m.id}" data-v="${d}" aria-label="${esc(dayLabel(d))}로 옮기기"><b>${i===0?"오늘":"일월화수목금토"[w]}</b><span>${dd}</span></button>`;
+    }
+    return `<div class="wkstrip">${h}<button class="wk more" data-act="moveMore" data-id="${m.id}" aria-label="다른 날짜"><b>더</b><span>···</span></button></div>`;
+  }
+  function renderList(){ renderCal(); renderMapPage(); }
+  function updateComposer(){
+    const show = !st.drawer && (st.page===0 || (st.page===1 && st.calOpen));
+    $("composer").style.display = show ? "" : "none";
+    if(show) syncComposer();
+  }
+  // 한국 공휴일 (대체공휴일 포함) · 주요 기념일
+  const HOL = {
+    "2026-01-01":"신정","2026-02-16":"설날 연휴","2026-02-17":"설날","2026-02-18":"설날 연휴","2026-03-01":"삼일절","2026-03-02":"대체휴일",
+    "2026-05-05":"어린이날","2026-05-24":"석가탄신일","2026-05-25":"대체휴일","2026-06-03":"지방선거","2026-06-06":"현충일",
+    "2026-08-15":"광복절","2026-08-17":"대체휴일","2026-09-24":"추석 연휴","2026-09-25":"추석","2026-09-26":"추석 연휴",
+    "2026-10-03":"개천절","2026-10-05":"대체휴일","2026-10-09":"한글날","2026-12-25":"성탄절",
+    "2027-01-01":"신정","2027-02-06":"설날 연휴","2027-02-07":"설날","2027-02-08":"설날 연휴","2027-02-09":"대체휴일","2027-03-01":"삼일절",
+    "2027-05-05":"어린이날","2027-05-13":"석가탄신일","2027-06-06":"현충일","2027-08-15":"광복절","2027-08-16":"대체휴일",
+    "2027-09-14":"추석 연휴","2027-09-15":"추석","2027-09-16":"추석 연휴","2027-10-03":"개천절","2027-10-04":"대체휴일",
+    "2027-10-09":"한글날","2027-10-11":"대체휴일","2027-12-25":"성탄절","2027-12-27":"대체휴일"
+  };
+  const ANNIV = {"02-14":"밸런타인","03-14":"화이트데이","04-05":"식목일","05-01":"근로자의날","05-08":"어버이날","05-15":"스승의날","07-17":"제헌절","10-01":"국군의날","11-11":"빼빼로"};
+  const dayName = k => HOL[k] ? {t:HOL[k], hol:true} : ANNIV[k.slice(5)] ? {t:ANNIV[k.slice(5)], hol:false} : null;
+  function renderCal(){
+    if(st.page!==1) return;
+    const today = ymdKST();
+    if(!st.cal){ const [y,m] = today.split("-").map(Number); st.cal = {y, m:m-1, sel:today}; }
+    const {y, m:mo, sel} = st.cal;
+    const first = (new Date(y, mo, 1).getDay()+6)%7, days = new Date(y, mo+1, 0).getDate();
+    const byDay = {};
+    memos.forEach(x => { const d = dueOf(x); (byDay[d] = byDay[d]||[]).push(x); });
+    Object.values(byDay).forEach(a => a.sort((p,q) => (p.done?1:0)-(q.done?1:0) || byNew(p,q)));
+    let cells = "";
+    for(let i=0;i<first;i++) cells += `<div class="cday blank"></div>`;
+    for(let d=1; d<=days; d++){
+      const key = `${y}-${pad(mo+1)}-${pad(d)}`, list = byDay[key]||[], dow = new Date(y, mo, d).getDay(), hn = dayName(key);
+      const dots = list.slice(0,4).map(x => `<i class="${x.done?"ok":""}" style="--c:${catOf(x).c}"></i>`).join("") + (list.length>4?`<em>+</em>`:"");
+      const tits = list.slice(0,3).map(x => `<span class="ctit ${x.done?"ok":""}" style="--c:${catOf(x).c};--cbg:${catOf(x).bg}">${esc(x.title||x.raw||"메모")}</span>`).join("") + (list.length>3?`<span class="cmore">+${list.length-3}</span>`:"");
+      cells += `<button class="cday ${dow===0?"sun":""} ${dow===6?"sat":""} ${hn&&hn.hol?"hol":""} ${key===today?"today":""} ${key===sel?"sel":""}" data-act="calDay" data-v="${key}" aria-label="${mo+1}월 ${d}일, 할 일 ${list.length}개"><span class="dn">${d}</span>${hn?`<span class="hname">${esc(hn.t)}</span>`:""}<span class="cdots">${dots}</span>${tits}</button>`;
+    }
+    const lateList = sel===today ? memos.filter(x => !x.done && dueOf(x) < today).sort(byNew) : [];
+    const selList = byDay[sel] || [];
+    const undone = selList.filter(x=>!x.done).length;
+    $("cwrap").innerHTML = `<div class="chead"><button class="homeb" data-act="goHome" aria-label="홈으로"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7v8.5a1.5 1.5 0 0 1-1.5 1.5H15v-6H9v6H5.5A1.5 1.5 0 0 1 4 19.5z"/></svg></button><h2>${y}년 ${mo+1}월</h2>
+        <button data-act="calNav" data-v="-1" aria-label="이전 달">‹</button><button data-act="calToday">오늘</button><button data-act="calNav" data-v="1" aria-label="다음 달">›</button></div>
+      <div class="cal7">${"월화수목금토일".split("").map((w,i)=>`<div class="cdow ${i===5?"sat":""} ${i===6?"sun":""}">${w}</div>`).join("")}${cells}</div>
+      <div class="cselh"><b>${esc(dayLabel(sel))}</b>${(()=>{const h=dayName(sel); return h?`<em class="${h.hol?"":"anniv"}">${esc(h.t)}</em>`:"";})()}<span>${selList.length ? `할 일 ${undone}개 남음` : ""}</span></div>
+      ${lateList.length ? `<p class="lgrp" style="color:var(--warn)">밀린 할 일 ${lateList.length}개 · 날짜 아이콘으로 옮기세요</p><div class="rlist">${lateList.map(rowHTML).join("")}</div>${selList.length?`<p class="lgrp">오늘</p>`:""}` : ""}
+      ${selList.length ? `<div class="rlist">${selList.map(rowHTML).join("")}</div>` : lateList.length ? "" : `<div class="empty" style="padding:24px 12px"><b>이 날은 비어 있습니다</b>지금 아래에 입력하면 ${esc(dayLabel(sel))} 할 일로 들어갑니다.</div>`}`;
+  }
+  function renderMapPage(){
+    if(st.page!==2) return;
+    const seg = `<div class="seg" role="tablist"><button data-act="mapMode" data-v="tree" aria-pressed="${settings.mapMode==="tree"}">보드</button><button data-act="mapMode" data-v="graph" aria-pressed="${settings.mapMode==="graph"}">브레인맵</button></div>`;
+    const list = active().sort(byNew).slice(0,120);
+    let body;
+    if(!mode) body = `<div class="empty">불러오는 중입니다</div>`;
+    else if(list.length < 2) body = `<div class="empty"><b>연결할 메모가 아직 적습니다</b>메모가 쌓이면 브랜드, 주제, 아이디어→작업 흐름으로 가지가 뻗습니다.</div>`;
+    else body = settings.mapMode==="graph" ? viewGraph(list) : viewTree(list);
+    $("mpage").classList.toggle("dark", settings.mapMode==="graph");
+    $("mwrap").innerHTML = `<div class="lhead"><button class="homeb" data-act="goHome" aria-label="홈으로"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7v8.5a1.5 1.5 0 0 1-1.5 1.5H15v-6H9v6H5.5A1.5 1.5 0 0 1 4 19.5z"/></svg></button><h2>${settings.mapMode==="graph"?"브레인맵":"보드"}</h2><span>${settings.mapMode==="graph"?`${list.length}개 생각의 연결`:"알아서 나눠 담긴 할 일"}</span></div>${seg}${body}`;
+    if(settings.mapMode==="graph") requestAnimationFrame(initGraph);
+  }
+  function setPage(p){
+    st.page = Math.max(0, Math.min(2, p));
+    $("cpage").classList.toggle("on", st.page>=1);
+    $("mpage").classList.toggle("on", st.page===2);
+    [...$("pager").children].forEach((b,i) => b.setAttribute("aria-pressed", String(i===st.page)));
+    st.calOpen = false;
+    if(st.calPicked) setDue(null);
+    updateComposer();
+    renderList();
+  }
+  (function swipe(){
+    let sx=0, sy=0, ok=false;
+    document.addEventListener("touchstart", e => {
+      ok = !st.drawer && !st.side && !st.sheet && !(e.target.closest && e.target.closest(".gcanvas, .tree")) && !(e.target.closest && e.target.closest(".composer")) && e.touches.length===1;
+      if(ok){ sx=e.touches[0].clientX; sy=e.touches[0].clientY; }
+    }, {passive:true});
+    document.addEventListener("touchend", e => {
+      if(!ok) return; ok=false;
+      const t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy;
+      if(Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy)*1.5) return;
+      if(dx < 0 && st.page < 2) setPage(st.page+1);
+      else if(dx > 0 && st.page > 0) setPage(st.page-1);
+    }, {passive:true});
+  })();
+  function openSide(){ st.side=true; st.sideEdit=false; renderSide(); $("side").classList.add("on"); $("scrim").classList.add("on"); }
+  function closeSide(){ if(st.sideEdit) saveSettings(); st.side=false; st.sideEdit=false; $("side").classList.remove("on"); $("scrim").classList.remove("on"); }
+  const FOLDER = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 8.5h16v9a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5z"/><path d="M5.5 5.5h13M7 3.2h10"/></svg>`;
+  function renderSide(){
+    if(!st.side) return;
+    const last = {}, cnt = {};
+    memos.forEach(m => { if(!m.client) return; last[m.client] = Math.max(last[m.client]||0, m.createdAt); if(!m.done) cnt[m.client] = (cnt[m.client]||0)+1; });
+    const fa = foldersByArea();
+    const recent = memos.slice().sort(byNew).slice(0,6);
+    const sec = a => { const bs = fa[a].sort((x,y) => (last[y]||0)-(last[x]||0) || x.localeCompare(y,"ko"));
+      return `<p class="ssec"><b class="adot" style="background:${AREA_COLOR[a]}"></b>${AREA_LABEL[a]}</p>` + (bs.length ? bs.map(b => `<button class="srow" data-act="sideBrand" data-v="${esc(b)}">${FOLDER}<span>${esc(b)}</span>${cnt[b]?`<em>${cnt[b]}</em>`:""}</button>`).join("") : `<div class="sempty">아직 폴더가 없습니다.</div>`); };
+    $("side").innerHTML = `
+      <p class="ssec" style="margin-bottom:0">폴더<button data-act="sideNew">${st.sideNew?"닫기":"+ 추가"}</button></p>
+      ${st.sideNew?`<div class="snew"><input id="sideBrandIn" placeholder="새 폴더 이름" maxlength="40"><button data-act="sideAdd">추가</button></div><div class="apick" style="margin:0 8px 8px">${AREAS.map(a=>`<button data-act="sideArea" data-v="${a}" aria-pressed="${(st.sideArea||"업무")===a}">${AREA_LABEL[a]}</button>`).join("")}</div>`:""}
+      ${AREAS.map(sec).join("")}
+      <div class="sdiv"></div>
+      <p class="ssec">최근 항목</p>
+      ${recent.length ? recent.map(m => `<button class="srow" data-act="sideMemo" data-id="${m.id}" style="--c:${catOf(m).c}"><i></i><span${m.done?' style="text-decoration:line-through;color:var(--muted)"':""}>${esc(m.title||m.raw||"사진 메모")}</span></button>`).join("") : `<div class="sempty">아직 메모가 없습니다.</div>`}
+      <div class="sdiv"></div>
+      <button class="srow" data-act="sideNav" data-v="matrix" style="font-size:14.5px">${IC(MENU.matrix.ic)}<span>우선순위 매트릭스</span></button>
+      <button class="srow" data-act="sideNav" data-v="done" style="font-size:14.5px">${IC('<path d="M5 12.5 10 17l9-10"/>')}<span>완료한 메모</span><em>${memos.filter(m=>m.done).length||""}</em></button>
+      <button class="srow" data-act="keyOpen" style="font-size:14.5px">${IC('<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l2 2M15 8l2 2"/>')}<span>AI 설정</span><em>${sample?"켜짐":"꺼짐"}</em></button>
+      ${st.fbUser?`<button class="srow" data-act="logout" style="font-size:14.5px">${IC('<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H4"/>')}<span>로그아웃</span><em style="max-width:120px;overflow:hidden;text-overflow:ellipsis">${esc(st.fbUser)}</em></button>`:""}
+      <div class="sfoot"><button data-act="sideWrite"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>새 메모</button></div>`;
+    if(st.sideNew){ const i=$("sideBrandIn"); if(i) setTimeout(()=>i.focus(),50); }
+  }
+  function sideAdd(){
+    const i=$("sideBrandIn"); const v=(i&&i.value||"").trim().slice(0,40); if(!v){ i&&i.focus(); return; }
+    if(!settings.brands.includes(v)){ settings.brands = settings.brands.concat(v); }
+    setFolderArea(v, st.sideArea||"업무"); saveSettings();
+    st.sideNew=false; renderSide(); toast(`${AREA_LABEL[st.sideArea||"업무"]} › ${v} 폴더를 만들었습니다`);
+  }
+  $("menuBtn").onclick = () => openSide();
+  $("searchBtn").onclick = () => openDrawer("search");
+  window.addEventListener("keydown", e => { if(e.key!=="Escape") return; if(st.side) closeSide(); else if(st.drawer) back(); });
+
+  /* ---------- render: home ---------- */
+  function renderHome(){
+    const n = active().length;
+    const b=$("badge"); b.hidden=!n; b.textContent=n>99?"99+":n;
+    const sleeping = memos.filter(isSleeping).length;
+    $("homeSleep").innerHTML = sleeping ? `<button class="homesleep" data-act="homeSleep">⏰ 3일 넘게 그대로인 메모 <b>${sleeping}개</b></button>` : "";
+    const recent = sessionIds.map(getMemo).filter(Boolean).slice(-5).reverse();
+    $("results").innerHTML = recent.length ? `<div class="rlist">${recent.map(m => {
+      const c = catOf(m);
+      if(m.status==="working") return `<div class="rrow" style="--c:${c.c}"><span class="dot"></span><span class="rt" style="color:var(--muted)">${esc(m.raw || "사진 메모")}</span><span class="rc" style="color:var(--muted)">정리 중</span></div>`;
+      const sub = m.err ? "다시 정리 필요" : (m.event ? evLabel(m.event) : (m.quadrant ? QS[m.quadrant].name : (m.client || "")));
+      return `<div class="rrow ${m.done?"ok":""}" style="--c:${c.c}"><button class="rck" data-act="hdone" data-id="${m.id}" aria-label="${m.done?"완료 취소":"처리 완료"}" aria-pressed="${!!m.done}"></button><button class="rt" data-act="peek" data-id="${m.id}">${esc(m.title || m.raw || "사진 메모")}${sub?`<small>${esc(sub)}</small>`:""}</button><span class="rc">${esc(m.category||"미분류")}</span></div>`;
+    }).join("")}</div>` : "";
+    const _unused = recent.map(m => {
+      const c = catOf(m);
+      if(m.status==="working") return `<div class="rcard" style="--c:${c.c}"><div class="r-body"><div class="working" style="margin:0"><span class="dot"></span>나누고 정리하는 중</div><div class="r-title" style="font-weight:500">${esc(m.raw || "사진 메모")}</div></div></div>`;
+      const meta = [];
+      if(m.quadrant) meta.push(QS[m.quadrant].name);
+      if((m.checklist||[]).length) meta.push(`실행 단계 ${m.checklist.length}개`);
+      if(m.event) meta.push(`📅 ${evLabel(m.event)}`);
+      if((m.related||[]).length) meta.push(`연결 ${m.related.length}`);
+      if(m.err) meta.push(m.err);
+      return `<button class="rcard" data-act="peek" data-id="${m.id}" style="--c:${c.c};--cbg:${c.bg}">
+        <div class="r-body"><div class="r-head"><span class="cat">${esc(m.category||"미분류")}</span>${m.client?`<span class="who">${esc(m.client)}</span>`:""}</div>
+        <div class="r-title">${esc(m.title || m.raw || "사진 메모")}</div>${meta.length?`<div class="r-meta">${esc(meta.join(" · "))}</div>`:""}</div>
+        <svg class="r-go" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>`;
+    }).join("");
+    if(!rec) $("hint").textContent = (sampleChecked && !sample) ? "AI 꺼짐 · 메뉴에서 AI 설정" : "";
+  }
+
+  /* ---------- render: drawer ---------- */
+  const IC = p => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+  const BACK = `<button class="round" data-act="back" aria-label="뒤로"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>`;
+  const CLOSE = `<button class="round" data-act="close" aria-label="닫기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>`;
+
+  function todayList(){
+    const t = ymdKST();
+    return active().filter(m => m.quadrant==="q1" || dueOf(m) <= t || (m.event && m.event.date <= t)).sort((a,b) => {
+      const ae = a.event ? a.event.date+(a.event.time||"99") : "9", be = b.event ? b.event.date+(b.event.time||"99") : "9";
+      return ae < be ? -1 : ae > be ? 1 : byNew(a,b);
+    });
+  }
+  function menuCount(k){
+    if(k==="today") return todayList().length;
+    if(k==="matrix") return active().filter(m=>m.quadrant).length;
+    if(k==="clients") return new Set(active().map(m=>m.client).filter(Boolean)).size;
+    if(k==="map") return linkMap(active()).length;
+    if(k==="recent") return active().length;
+    return 0;
+  }
+
+  function render(){
+    renderHome();
+    renderSide();
+    renderList();
+    if(!st.drawer) return;
+    const v = st.view; let h = "";
+    if(!mode){ $("dwrap").innerHTML = `<div class="vtop">${CLOSE}<h2>불러오는 중</h2></div>`; return; }
+    if(v==="menu") h = viewMenu();
+    else if(v==="today") h = head("오늘 처리할 것") + listOrEmpty(todayList(), "오늘 급한 일은 없습니다", "지금 바로 칸에 들어간 메모와 오늘·지난 일정이 여기 모입니다.");
+    else if(v==="matrix") h = viewMatrix();
+    else if(v==="clients") h = viewClients();
+    else if(v==="client") h = head(st.arg || "브랜드 없음", st.arg?`<button class="tbtn" data-act="brandMemo">+ 메모</button>`:"") + listOrEmpty(memos.filter(m => (m.client||null)===(st.arg||null)).sort((a,b)=>(a.done?1:0)-(b.done?1:0)||byNew(a,b)), "아직 메모가 없습니다", "＋ 메모를 누르면 이 브랜드로 바로 적을 수 있습니다.");
+    else if(v==="map") h = viewMap();
+    else if(v==="recent") h = head("최근 메모") + listOrEmpty(active().sort(byNew), "아직 비어 있습니다", "홈에서 첫 메모를 던져보세요.");
+    else if(v==="cat") h = head(st.arg) + listOrEmpty(active().filter(m=>m.category===st.arg).sort(byNew), "메모가 없습니다", "");
+    else if(v==="sleep") h = head("잠자는 메모") + listOrEmpty(memos.filter(isSleeping).sort(byNew), "잠자는 메모가 없습니다", "");
+    else if(v==="done") h = head("완료") + listOrEmpty(memos.filter(m=>m.done).sort(byNew), "완료한 메모가 없습니다", "");
+    else if(v==="search") h = viewSearch();
+    else if(v==="memo"){ const m = getMemo(st.arg); h = head(m ? (m.title||"메모") : "메모") + (m ? `<div class="list">${card(m, true)}</div>` : `<div class="empty">삭제된 메모입니다</div>`); }
+    const keepQ = document.activeElement && document.activeElement.id==="q";
+    const selS = keepQ ? document.activeElement.selectionStart : 0;
+    $("dwrap").innerHTML = h;
+    if($("dwrap").querySelector("#gcanvas")) requestAnimationFrame(initGraph);
+    if(keepQ){ const q=$("q"); if(q){ q.focus(); try{ q.setSelectionRange(selS, selS); }catch(e){} } }
+  }
+  function head(title, right){ return `<div class="vtop">${st.stack.length ? BACK : CLOSE}<h2>${esc(title)}</h2>${right||""}</div>`; }
+  function listOrEmpty(list, t, s){
+    if(!list.length) return `<div class="empty"><b>${esc(t)}</b>${esc(s)}</div>`;
+    return `<div class="list">${list.map(m => card(m)).join("")}</div>`;
+  }
+  function notice(){
+    if(sampleChecked && !sample) return `<div class="notice">AI 정리가 꺼져 있습니다. 메뉴 아래 AI 설정에서 키를 넣으면 켜집니다.</div>`;
+    if(mode==="local") return `<div class="notice">이 기기 브라우저에만 저장되고 있습니다.</div>`;
+    return "";
+  }
+
+  function viewMenu(){
+    const ord = settings.order;
+    const items = ord.map((k,i) => {
+      const it = MENU[k], n = menuCount(k);
+      const right = st.editOrder
+        ? `<span class="ord"><button data-act="mv" data-i="${i}" data-d="-1" aria-label="위로" ${i===0?"disabled":""}>${IC('<path d="m6 15 6-6 6 6"/>')}</button><button data-act="mv" data-i="${i}" data-d="1" aria-label="아래로" ${i===ord.length-1?"disabled":""}>${IC('<path d="m6 9 6 6 6-6"/>')}</button></span>`
+        : `<span class="n ${k==="today"&&n?"hot":""}">${n||""}</span>`;
+      const tag = st.editOrder ? "div" : "button";
+      return `<${tag} class="mi" ${st.editOrder?"":`data-act="nav" data-v="${k}"`}><span class="ic">${IC(it.ic)}</span><span class="tx"><b>${esc(it.t)}</b><small>${esc(it.s)}</small></span>${right}</${tag}>`;
+    }).join("");
+    const cats = Object.keys(CATS).map(k => `<button class="ms" data-act="nav" data-v="cat" data-arg="${k}" style="--c:${CATS[k].c}"><i></i><span>${k}</span><em>${active().filter(m=>m.category===k).length}</em></button>`).join("");
+    const sleeping = memos.filter(isSleeping).length, done = memos.filter(m=>m.done).length;
+    return `<div class="vtop">${CLOSE}<h2>카테고리</h2><button class="tbtn" data-act="editOrder">${st.editOrder?"완료":"순서 바꾸기"}</button></div>
+      <button class="search" data-act="nav" data-v="search" style="text-align:left;color:var(--muted)">클라이언트, 키워드로 찾기</button>
+      ${notice()}
+      <div class="menu">${items}</div>
+      <p class="msec">분류</p><div class="minigrid">${cats}</div>
+      <p class="msec">정리함</p><div class="minigrid">
+        <button class="ms" data-act="nav" data-v="sleep" style="--c:var(--warn)"><i></i><span>잠자는 메모</span><em>${sleeping}</em></button>
+        <button class="ms" data-act="nav" data-v="done" style="--c:var(--raw)"><i></i><span>완료</span><em>${done}</em></button>
+      </div>`;
+  }
+
+  function viewSearch(){
+    const q = st.q.trim().toLowerCase();
+    const list = q ? memos.filter(m => [m.raw,m.title,m.summary,m.client,m.extracted,(m.tags||[]).join(" ")].join(" ").toLowerCase().includes(q)).sort(byNew) : [];
+    return head("찾기") + `<input class="search" id="q" type="search" placeholder="클라이언트, 키워드로 찾기" value="${esc(st.q)}">`
+      + (q ? listOrEmpty(list, "찾는 메모가 없습니다", "다른 단어로 찾아보세요.") : "");
+  }
+
+  function viewMatrix(){
+    const pool = active().filter(m => m.quadrant);
+    const cell = q => {
+      const items = pool.filter(m => m.quadrant===q).sort(byNew);
+      return `<div class="cell ${q}"><h3><span>${QS[q].name}<small>${QS[q].sub}</small></span><em>${items.length}</em></h3>
+        ${items.length ? items.slice(0,12).map(m => `<button class="mxi" data-act="memo" data-id="${m.id}" style="--c:${catOf(m).c}">${esc(m.title||m.raw)}</button>`).join("") + (items.length>12?`<div class="mxe">+${items.length-12}개 더</div>`:"") : `<div class="mxe">비어 있음</div>`}</div>`;
+    };
+    const un = active().filter(m => !m.quadrant && (m.category==="할일" || m.category==="아이디어") && m.status!=="working").sort(byNew);
+    return head("우선순위 매트릭스")
+      + `<div class="ax"><span>← 급함</span><span>덜 급함 →</span></div>`
+      + `<div class="mx">${cell("q1")}${cell("q2")}${cell("q3")}${cell("q4")}</div>`
+      + `<p class="msec" style="margin-top:12px">할일·아이디어는 AI가 자동으로 칸에 넣습니다. 메모를 열어 칸을 옮길 수 있습니다.</p>`
+      + (un.length ? `<p class="msec">아직 칸이 없는 메모</p>` + `<div class="list">${un.map(m=>card(m)).join("")}</div>` : "");
+  }
+
+  function viewClients(){
+    const g = {};
+    active().forEach(m => { const k = m.client || ""; (g[k] = g[k]||[]).push(m); });
+    const keys = Object.keys(g).filter(Boolean).sort((a,b) => g[b].length-g[a].length || a.localeCompare(b,"ko"));
+    if(!keys.length && !g[""]) return head("클라이언트별 모음") + `<div class="empty"><b>아직 클라이언트가 없습니다</b>메모에 학원·브랜드 이름이 나오면 자동으로 묶입니다.</div>`;
+    const row = (k, arr) => {
+      const cats = [...new Set(arr.map(m=>m.category).filter(Boolean))];
+      const last = arr.sort(byNew)[0];
+      return `<button class="mi" data-act="nav" data-v="client" data-arg="${esc(k)}"><span class="ic">${IC(MENU.clients.ic)}</span><span class="tx"><b>${esc(k||"클라이언트 없음")}</b><small>${esc(cats.join(" · "))}${last?" · "+ago(last.createdAt):""}</small></span><span class="n">${arr.length}</span></button>`;
+    };
+    return head("클라이언트별 모음") + `<div class="clist">${keys.map(k=>row(k,g[k])).join("")}${g[""]?row("",g[""]):""}</div>`;
+  }
+
+  function viewMap(){
+    const seg = `<div class="seg" role="tablist"><button data-act="mapMode" data-v="graph" aria-pressed="${settings.mapMode==="graph"}">그래프</button><button data-act="mapMode" data-v="tree" aria-pressed="${settings.mapMode==="tree"}">마인드맵</button></div>`;
+    const list = active().sort(byNew).slice(0,120);
+    if(list.length < 2) return head("생각 연결 지도") + seg + `<div class="empty"><b>연결할 메모가 아직 적습니다</b>메모가 쌓이면 클라이언트, 주제, 아이디어→작업 흐름으로 이어집니다.</div>`;
+    return head("생각 연결 지도") + seg + (settings.mapMode==="tree" ? viewTree(list) : viewGraph(list));
+  }
+
+  let G = null; // current graph data
+  function viewGraph(list){
+    const dark = true;
+    const clients = [...new Set(list.map(m=>m.client).filter(Boolean))];
+    const areasUsed = [...new Set(list.map(areaOf))];
+    const nodes = list.map(m => ({id:m.id, m, hub:false})).concat(clients.map(c => ({id:"hub:"+c, name:c, hub:true}))).concat(areasUsed.map(a => ({id:"area:"+a, name:AREA_LABEL[a], hub:true, area:a})));
+    const idx = new Map(nodes.map((x,i)=>[x.id,i]));
+    const E = [];
+    linkMap(list).filter(e => e.type!=="client").forEach(e => E.push({s:idx.get(e.a), t:idx.get(e.b), type:e.type}));
+    list.forEach(m => { if(m.client) E.push({s:idx.get(m.id), t:idx.get("hub:"+m.client), type:"client"}); else E.push({s:idx.get(m.id), t:idx.get("area:"+areaOf(m)), type:"client"}); });
+    clients.forEach(c => { const a = folderAreaOf(c); if(idx.has("area:"+a)) E.push({s:idx.get("hub:"+c), t:idx.get("area:"+a), type:"area"}); });
+    const n = nodes.length, W = 1000, H = 1000, deg = new Array(n).fill(0);
+    E.forEach(e => { deg[e.s]++; deg[e.t]++; });
+    const P = nodes.map((x,i) => { const a = i*2.399963, r = 40*Math.sqrt(i+1); return {x:W/2+r*Math.cos(a), y:H/2+r*Math.sin(a), vx:0, vy:0}; });
+    for(let it=0; it<320; it++){
+      const cool = 1 - it/320;
+      for(let i=0;i<n;i++) for(let j=i+1;j<n;j++){
+        let dx=P[i].x-P[j].x, dy=P[i].y-P[j].y, d2=dx*dx+dy*dy+0.01; if(d2 > 250000) continue;
+        const rep = (nodes[i].area || nodes[j].area) ? 26000 : (nodes[i].hub && nodes[j].hub) ? 16000 : 5200;
+        const f = rep/d2, d=Math.sqrt(d2); dx/=d; dy/=d; P[i].vx+=dx*f; P[i].vy+=dy*f; P[j].vx-=dx*f; P[j].vy-=dy*f;
+      }
+      E.forEach(e => { const a=P[e.s], b=P[e.t]; let dx=b.x-a.x, dy=b.y-a.y; const d=Math.sqrt(dx*dx+dy*dy)+0.01;
+        const L = e.type==="area" ? 190 : e.type==="client" ? 80 : e.type==="flow" ? 95 : 130, k = e.type==="tag" ? 0.02 : 0.05;
+        const f=(d-L)*k; dx/=d; dy/=d; a.vx+=dx*f; a.vy+=dy*f; b.vx-=dx*f; b.vy-=dy*f; });
+      for(let i=0;i<n;i++){ const p=P[i]; p.vx += (W/2-p.x)*0.004; p.vy += (H/2-p.y)*0.004;
+        const sc = 0.6*cool+0.05; p.x += Math.max(-16,Math.min(16,p.vx*sc)); p.y += Math.max(-16,Math.min(16,p.vy*sc)); p.vx*=0.55; p.vy*=0.55; }
+    }
+    let minX=1e9,maxX=-1e9,minY=1e9,maxY=-1e9;
+    P.forEach(p => { minX=Math.min(minX,p.x); maxX=Math.max(maxX,p.x); minY=Math.min(minY,p.y); maxY=Math.max(maxY,p.y); });
+    G = {bounds:{minX,maxX,minY,maxY}};
+    const lineCol = t => dark ? (t==="area" ? `stroke="rgba(220,210,255,.45)" stroke-width="1.6"` : t==="flow" ? `stroke="#9C8BFF" stroke-width="1.6" opacity=".9"` : t==="tag" ? `stroke="rgba(190,180,255,.28)" stroke-width="1" stroke-dasharray="3 4"` : `stroke="rgba(170,155,255,.30)" stroke-width="1"`)
+      : (t==="flow" ? `stroke="var(--btn)" stroke-width="2"` : t==="tag" ? `stroke="var(--gl)" stroke-width="1.2" stroke-dasharray="4 4"` : `stroke="var(--gl)" stroke-width="1.2"`);
+    const lines = E.map(e => { const a=P[e.s], b=P[e.t];
+      return `<line x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" ${lineCol(e.type)} vector-effect="non-scaling-stroke"/>`; }).join("");
+    const radius = i => nodes[i].area ? 20 : nodes[i].hub ? 11 + Math.min(10, deg[i]*1.2) : 5 + Math.min(7, deg[i]*1.4);
+    const fillOf = x => x.area ? AREA_COLOR[x.area] : dark ? (x.hub ? "#A992FF" : "#CFC4FF") : (x.hub ? "var(--btn)" : catOf(x.m).c);
+    const halos = nodes.map((x,i) => x.hub ? `<circle class="halo gn" data-r="${(radius(i)*2.1).toFixed(1)}" cx="${P[i].x.toFixed(1)}" cy="${P[i].y.toFixed(1)}" r="${(radius(i)*2.1).toFixed(1)}" stroke="${dark?"#B7A6FF":"var(--btn)"}" stroke-width="1.2" vector-effect="non-scaling-stroke"/>` : "").join("");
+    const dots = nodes.map((x,i) => `<circle class="gn" data-gid="${esc(x.id)}" data-r="${radius(i).toFixed(1)}" cx="${P[i].x.toFixed(1)}" cy="${P[i].y.toFixed(1)}" r="${radius(i).toFixed(1)}" fill="${fillOf(x)}" ${(!x.hub && !deg[i])?'opacity=".45"':""}/>`).join("");
+    const labels = nodes.map((x,i) => `<text ${x.area?`style="font-weight:800"`:""} class="${x.hub?"hub major":deg[i]>=2?"major":"minor"}" data-y="${P[i].y.toFixed(1)}" data-r="${radius(i).toFixed(1)}" x="${P[i].x.toFixed(1)}" y="${P[i].y.toFixed(1)}" text-anchor="middle">${esc(x.hub ? x.name : (x.m.title||x.m.raw||"").slice(0,14))}</text>`).join("");
+    return `<div class="gcanvas ${dark?"dark":""}" id="gcanvas">
+      <svg id="gsvg" role="img" aria-label="메모 연결 그래프"><defs><filter id="gglow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <g id="gview"><g>${lines}</g><g>${halos}${dots}</g><g id="glabels">${labels}</g></g></svg>
+      <div class="ghint" id="ghint">두 손가락으로 확대·축소, 끌어서 이동</div>
+      <div class="glegend"><span><i style="border-color:${dark?"#9C8BFF":"var(--btn)"}"></i>이어지는 작업</span><span><i style="border-top-style:dashed"></i>같은 주제</span><span><b style="width:9px;height:9px;border-radius:50%;background:${dark?"#B7A6FF":"var(--btn)"};display:inline-block"></b>폴더</span>${AREAS.map(a=>`<span><b style="width:9px;height:9px;border-radius:50%;background:${AREA_COLOR[a]};display:inline-block"></b>${AREA_LABEL[a]}</span>`).join("")}</div>
+      <div class="gtools"><button data-act="gFit" aria-label="전체 보기">⤢</button></div>
+    </div>`;
+  }
+  function initGraph(){
+    const box = $("gcanvas"), svg = $("gsvg"), view = $("gview"); if(!box || !svg || !view || !G) return;
+    const top = box.getBoundingClientRect().top;
+    box.style.height = Math.max(320, window.innerHeight - top) + "px";
+    const cw = box.clientWidth, ch = box.clientHeight;
+    const circles = [...view.querySelectorAll(".gn")], texts = [...view.querySelectorAll("text")];
+    const fit = () => { const b=G.bounds, w=Math.max(1,b.maxX-b.minX), h=Math.max(1,b.maxY-b.minY);
+      const k = Math.min(cw/(w+120), ch/(h+160)); return {k, x: cw/2 - (b.minX+w/2)*k, y: ch/2 - (b.minY+h/2)*k}; };
+    const K0 = fit().k;
+    let T = st.gview || fit();
+    const apply = () => {
+      view.setAttribute("transform", `translate(${T.x.toFixed(1)},${T.y.toFixed(1)}) scale(${T.k.toFixed(4)})`);
+      const k = T.k, z = k / K0, rs = 0.6*Math.pow(z, 0.25)/k;
+      circles.forEach(c => c.setAttribute("r", (Number(c.dataset.r)*rs).toFixed(2)));
+      const gf = document.querySelector("#gglow feGaussianBlur"); if(gf) gf.setAttribute("stdDeviation", (2.6/k).toFixed(2));
+      const fs = 12.5/k;
+      texts.forEach(t => { t.setAttribute("font-size", fs.toFixed(2)); t.setAttribute("y", (Number(t.dataset.y) + Number(t.dataset.r)*rs + 15/k).toFixed(1)); t.style.strokeWidth = (3/k).toFixed(2)+"px"; });
+      box.classList.toggle("far", z < 1.7); box.classList.toggle("mid", z >= 1.7 && z < 2.8);
+      st.gview = T;
+    };
+    apply();
+    const pts = new Map(); let start = null, moved = 0;
+    const zoomAt = (cx, cy, factor) => { const nk = Math.max(0.15, Math.min(6, T.k*factor)); const f = nk/T.k; T = {k:nk, x: cx - (cx-T.x)*f, y: cy - (cy-T.y)*f}; apply(); };
+    const loc = e => { const r = svg.getBoundingClientRect(); return {x:e.clientX-r.left, y:e.clientY-r.top}; };
+    svg.addEventListener("pointerdown", e => { svg.setPointerCapture(e.pointerId); pts.set(e.pointerId, loc(e)); moved = 0; start = {T:{...T}, pts:new Map([...pts].map(([k,v])=>[k,{...v}]))}; const h=$("ghint"); if(h) h.style.display="none"; });
+    svg.addEventListener("pointermove", e => {
+      if(!pts.has(e.pointerId)) return; pts.set(e.pointerId, loc(e));
+      if(pts.size === 1){ const [p] = [...pts.values()], s0 = [...start.pts.values()][0]; if(!s0) return;
+        const dx=p.x-s0.x, dy=p.y-s0.y; moved = Math.max(moved, Math.abs(dx)+Math.abs(dy)); T = {k:start.T.k, x:start.T.x+dx, y:start.T.y+dy}; apply(); }
+      else if(pts.size === 2){ const [a,b] = [...pts.values()], s = [...start.pts.values()]; if(s.length<2) { start = {T:{...T}, pts:new Map([...pts].map(([k,v])=>[k,{...v}]))}; return; }
+        const d0 = Math.hypot(s[0].x-s[1].x, s[0].y-s[1].y)||1, d1 = Math.hypot(a.x-b.x, a.y-b.y);
+        const c0 = {x:(s[0].x+s[1].x)/2, y:(s[0].y+s[1].y)/2}, c1 = {x:(a.x+b.x)/2, y:(a.y+b.y)/2};
+        const nk = Math.max(0.15, Math.min(6, start.T.k*d1/d0)), f = nk/start.T.k;
+        T = {k:nk, x: c1.x - (c0.x-start.T.x)*f, y: c1.y - (c0.y-start.T.y)*f}; moved = 99; apply(); }
+    });
+    const up = e => {
+      const wasTap = pts.size===1 && moved < 8;
+      pts.delete(e.pointerId);
+      if(pts.size) start = {T:{...T}, pts:new Map([...pts].map(([k,v])=>[k,{...v}]))};
+      if(wasTap && e.type==="pointerup"){
+        const hit = document.elementFromPoint(e.clientX, e.clientY);
+        let id = hit && hit.dataset && hit.dataset.gid;
+        if(!id){ let best=null, bd=26; const r=svg.getBoundingClientRect();
+          circles.filter(c=>c.dataset.gid).forEach(c => { const x = T.x + Number(c.getAttribute("cx"))*T.k + r.left, y = T.y + Number(c.getAttribute("cy"))*T.k + r.top; const d=Math.hypot(x-e.clientX, y-e.clientY); if(d<bd){bd=d; best=c;} });
+          id = best && best.dataset.gid; }
+        if(id && id.startsWith("area:")){ }
+        else if(id && id.startsWith("hub:")){ const c=id.slice(4); if(st.drawer) go("client", c); else openDrawer("client", c); }
+        else if(id){ if(st.drawer) go("memo", id); else openDrawer("memo", id); }
+      }
+    };
+    svg.addEventListener("pointerup", up); svg.addEventListener("pointercancel", up);
+    svg.addEventListener("wheel", e => { e.preventDefault(); const p = loc(e); zoomAt(p.x, p.y, Math.exp(-e.deltaY*0.0015)); }, {passive:false});
+    box.querySelector('[data-act="gFit"]').onclick = () => { T = fit(); apply(); };
+  }
+  function viewTree(list){
+    const flowCount = id => { const m=getMemo(id); const out=(m&&m.related||[]).length; const inn=memos.filter(x=>(x.related||[]).includes(id)).length; return out+inn; };
+    const col = (name, items, color) => `<div class="br"><div class="br-h"><span class="root" style="background:${color}"></span>${esc(name)}<em>${items.length}</em></div>
+      <ul class="leaves">${items.sort(byNew).map(m => { const f=flowCount(m.id); return `<li><button class="leaf" data-act="memo" data-id="${m.id}" style="--c:${catOf(m).c}"><i></i><span>${esc(m.title||m.raw)}</span>${f?`<small>→ ${f}</small>`:""}</button></li>`; }).join("")}</ul></div>`;
+    let h = "";
+    AREAS.forEach(a => {
+      const inA = list.filter(m => areaOf(m)===a); if(!inA.length) return;
+      const byF = {}; inA.forEach(m => { const k = m.client || ""; (byF[k]=byF[k]||[]).push(m); });
+      const keys = Object.keys(byF).filter(Boolean).sort((x,y)=>byF[y].length-byF[x].length);
+      h += `<div class="area"><p class="area-h"><b class="adot" style="background:${AREA_COLOR[a]}"></b>${AREA_LABEL[a]}<em>${inA.length}</em></p>
+        <div class="tree">${keys.map(k => col(k, byF[k], AREA_COLOR[a])).join("")}${byF[""] ? col("기타", byF[""], "var(--line)") : ""}</div></div>`;
+    });
+    return h + `<p class="msec">→ 숫자는 이어지는 작업으로 연결된 메모 수입니다.</p>`;
+  }
+
+  function card(m, forceOpen){
+    const c = catOf(m);
+    const open = forceOpen || st.open===m.id, cl = m.checklist||[], doneN = cl.filter(x=>x.done).length;
+    const head = `<div class="card-head"><span class="cat">${esc(m.category || (m.status==="working"?"정리 중":"미분류"))}</span>
+      ${m.client?`<span class="who">${esc(m.client)}</span>`:""}${m.hasPhoto?`<span>📷</span>`:""}<span class="when">${ago(m.createdAt)}</span></div>`;
+    const body = m.title ? `<div class="title">${esc(m.title)}</div>${m.summary?`<p class="summary">${esc(m.summary)}</p>`:""}`
+      : `<p class="rawtext">${esc(m.raw||"(사진 메모)")}</p>`;
+    const meta = [];
+    if(m.quadrant) meta.push(`<span class="mp" style="color:var(--btn)">${QS[m.quadrant].name}</span>`);
+    if(cl.length) meta.push(`<span class="mp" style="color:var(--ink)">☑ ${doneN}/${cl.length}</span>`);
+    if(m.event) meta.push(`<span class="mp">📅 ${esc(evLabel(m.event))}${m.event.added?" · 등록함":""}</span>`);
+    if(isSleeping(m)) meta.push(`<span class="mp" style="color:var(--warn)">${SLEEP_DAYS}일+ 그대로</span>`);
+    let detail = "";
+    if(open){
+      const checks = cl.length ? `<div><p class="sec-t">실행 체크리스트</p><div class="check">${cl.map((x,i)=>`<label class="${x.done?"ok":""}"><input type="checkbox" data-act="tick" data-id="${m.id}" data-i="${i}" ${x.done?"checked":""}><span>${esc(x.t)}</span></label>`).join("")}</div></div>` : "";
+      const cal = m.event ? `<div class="cal"><span>📅 ${esc(m.event.title)}<br><small style="color:var(--muted)">${esc(evLabel(m.event))}</small></span><a href="${esc(calUrl(m))}" target="_blank" rel="noopener" data-act="cal" data-id="${m.id}" class="${m.event.added?"added":""}">${m.event.added?"다시 열기":"캘린더 등록"}</a></div>` : "";
+      const qp = `<div><p class="sec-t">우선순위 칸</p><div class="qpick">${Object.keys(QS).map(q=>`<button data-act="setq" data-id="${m.id}" data-v="${q}" aria-pressed="${m.quadrant===q}">${QS[q].name} <small style="opacity:.7">${QS[q].sub}</small></button>`).join("")}</div>${m.quadrant?`<button class="act" style="margin-top:6px;padding:4px 12px;font-size:13px" data-act="setq" data-id="${m.id}" data-v="">칸에서 빼기</button>`:""}</div>`;
+      const lk = linksFor(m.id);
+      const links = lk.length ? `<div><p class="sec-t">연결된 메모</p><div class="links">${lk.map(x=>`<button class="lk" data-act="memo" data-id="${x.m.id}" style="--c:${catOf(x.m).c}"><i></i><span>${esc(x.m.title||x.m.raw)}</span><small>${esc(x.label)}</small></button>`).join("")}</div></div>` : "";
+      const raw = `<div><p class="sec-t">내용 수정</p><input class="edittitle" data-act="titlein" data-id="${m.id}" value="${esc(m.title||"")}" placeholder="제목"><textarea class="editraw" data-act="rawin" data-id="${m.id}" placeholder="메모 내용">${esc(m.raw||"")}</textarea></div>`;
+      const ext = m.extracted ? `<div><p class="sec-t">사진에서 읽은 내용</p><p class="rawtext" style="margin:0">${esc(m.extracted)}</p></div>` : "";
+      const pick = `<div><p class="sec-t">분류 바꾸기</p><div class="catpick">${Object.keys(CATS).map(k=>`<button data-act="setcat" data-id="${m.id}" data-v="${k}" aria-pressed="${m.category===k}" style="--c:${CATS[k].c};--cbg:${CATS[k].bg}">${k}</button>`).join("")}</div></div>`;
+      const dueIn = `<div><p class="sec-t">할 일 날짜</p>${m.done?"":weekStrip(m)}<input type="date" style="margin-top:8px" class="clientin" data-act="duein" data-id="${m.id}" value="${dueOf(m)}"></div>`;
+      const areaPick = `<div><p class="sec-t">영역</p><div class="apick">${AREAS.map(a=>`<button data-act="setArea" data-id="${m.id}" data-v="${a}" aria-pressed="${areaOf(m)===a}">${AREA_LABEL[a]}</button>`).join("")}</div></div>`;
+      const client = areaPick + `<div><p class="sec-t">폴더</p><input class="clientin" data-act="clientin" data-id="${m.id}" value="${esc(m.client||"")}" placeholder="없으면 비워두세요"></div>`;
+      const tags = (m.tags||[]).length ? `<div class="tags">${m.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>` : "";
+      detail = `<div class="detail">${checks}${cal}${qp}${links}${raw}${ext}${pick}${dueIn}${client}${tags}<div class="actions">
+        <button class="act primary" data-act="done" data-id="${m.id}">${m.done?"다시 꺼내기":"처리 완료"}</button>
+        ${sample && m.status!=="working" ? `<button class="act" data-act="redo" data-id="${m.id}">AI로 다시 정리</button>` : ""}
+        <button class="act danger ${st.armed===m.id?"armed":""}" data-act="del" data-id="${m.id}">${st.armed===m.id?"한 번 더 누르면 삭제":"삭제"}</button></div></div>`;
+    }
+    const top = forceOpen ? `<div>${head}${body}${meta.length?`<div class="meta">${meta.join("")}</div>`:""}</div>`
+      : `<button class="open-btn" data-act="open" data-id="${m.id}" aria-expanded="${open}">${head}${body}${meta.length?`<div class="meta">${meta.join("")}</div>`:""}${m.status==="working"?`<div class="working"><span class="dot"></span>AI가 정리하는 중</div>`:""}</button>`;
+    return `<article class="card ${m.done?"done":""}" data-card="${m.id}" style="--c:${c.c};--cbg:${c.bg}">${top}
+      ${m.err?`<div class="err">${esc(m.err)}${sample?` <button class="act" style="padding:3px 10px;font-size:12.5px" data-act="redo" data-id="${m.id}">다시 정리</button>`:""}</div>`:""}
+      ${detail}</article>`;
+  }
+
+  /* ---------- events ---------- */
+  document.addEventListener("click", async e => {
+    const el = e.target.closest("[data-act]"); if(!el) return;
+    const act = el.dataset.act, id = el.dataset.id;
+    if(act==="scrim") { closeSide(); closeSheet(); }
+    else if(act==="sideBrand"){ closeSide(); openDrawer("client", el.dataset.v); }
+    else if(act==="sideMemo"){ closeSide(); openDrawer("memo", id); }
+    else if(act==="sideNew"){ st.sideNew=!st.sideNew; renderSide(); }
+    else if(act==="sideAdd"){ sideAdd(); }
+    else if(act==="sideArea"){ st.sideArea = el.dataset.v; renderSide(); }
+    else if(act==="newArea"){ st.newArea = el.dataset.v; const keep=($("newBrand")||{}).value||""; renderSheet(); const nb=$("newBrand"); if(nb){ nb.value=keep; nb.focus(); } }
+    else if(act==="setArea"){ const m=getMemo(id); if(m){ const a=el.dataset.v; await put(Object.assign({}, m, {area:a})); if(m.client) setFolderArea(m.client, a); toast(`${AREA_LABEL[a]}(으)로 옮겼습니다`); } }
+    else if(act==="logout"){ if(fbAuth){ await fbAuth.signOut(); location.reload(); } }
+    else if(act==="keyOpen"){ closeSide(); openKeySheet(); }
+    else if(act==="keySave"){ const v=($("keyIn").value||"").trim(); if(!v){ $("keyIn").focus(); return; } try{ localStorage.setItem(KEY_LS, v); }catch(e){} sample=apiSample(v); imgLimits={maxCount:4}; closeSheet(); render(); toast("AI가 켜졌습니다"); }
+    else if(act==="keyDel"){ try{ localStorage.removeItem(KEY_LS); }catch(e){} if(!(window.claude&&window.claude.use)){ sample=null; imgLimits=null; } closeSheet(); render(); toast("AI 키를 지웠습니다"); }
+    else if(act==="sideWrite"){ closeSide(); setPage(0); setTimeout(()=>ta.focus(),250); }
+    else if(act==="brandMemo"){ const b=st.arg; closeDrawer(); setPage(0); st.brand=b; renderChips(); setTimeout(()=>ta.focus(),250); }
+    else if(act==="sideNav"){ closeSide(); openDrawer(el.dataset.v, el.dataset.arg ?? null); }
+    else if(act==="sideOrder"){ st.sideEdit = !st.sideEdit; renderSide(); if(!st.sideEdit) saveSettings(); }
+    else if(act==="smv"){ const i=Number(el.dataset.i), d=Number(el.dataset.d), o=settings.order.slice(), j=i+d; if(j<0||j>=o.length) return; [o[i],o[j]]=[o[j],o[i]]; settings.order=o; renderSide(); }
+    else if(act==="close") closeDrawer();
+    else if(act==="back") back();
+    else if(act==="nav") go(el.dataset.v, el.dataset.arg ?? null);
+    else if(act==="memo") { if(st.drawer) go("memo", id); else openDrawer("memo", id); }
+    else if(act==="peek") { openDrawer("memo", id); }
+    else if(act==="calDay"){ st.cal.sel = el.dataset.v; setDue(el.dataset.v===ymdKST() ? null : el.dataset.v, true); st.calOpen = true; renderCal(); updateComposer(); }
+    else if(act==="calNav"){ let m = st.cal.m + Number(el.dataset.v), y = st.cal.y; if(m<0){m=11;y--;} if(m>11){m=0;y++;} st.cal.m=m; st.cal.y=y; renderCal(); }
+    else if(act==="calToday"){ const [y,m]=ymdKST().split("-").map(Number); st.cal={y, m:m-1, sel:ymdKST()}; setDue(null); renderCal(); }
+    else if(act==="pickDate"){ openDatePicker(); }
+    else if(act==="rowDate"){ st.rowOpen = st.rowOpen===id ? null : id; render(); }
+    else if(act==="moveDue"){ const m=getMemo(id); if(m){ const v=el.dataset.v; st.rowOpen=null; await put(Object.assign({}, m, {due:v, dueFixed:true})); toast(`${dayLabel(v)}로 옮겼습니다`); } }
+    else if(act==="moveMore"){ st.moveId = id; st.rowOpen=null; openDatePicker(dueOf(getMemo(id)||{})); render(); }
+    else if(act==="dsNav"){ let m = st.ds.m + Number(el.dataset.v), y = st.ds.y; if(m<0){m=11;y--;} if(m>11){m=0;y++;} st.ds={y,m}; renderDateSheet(); }
+    else if(act==="dsDay"){ const v = el.dataset.v; const mv = st.moveId && getMemo(st.moveId);
+      if(mv){ st.moveId=null; closeSheet(); await put(Object.assign({}, mv, {due:v, dueFixed:true})); toast(`${dayLabel(v)}로 옮겼습니다`); }
+      else { setDue(v===ymdKST() ? null : v); closeSheet(); toast(`${dayLabel(v)} 할 일로 들어갑니다`); } }
+    else if(act==="clearDate"){ setDue(null); }
+    else if(act==="clearBrand"){ st.brand=null; renderChips(); }
+    else if(act==="pickBrand"){ st.brand = el.dataset.v || null; closeSheet(); renderChips(); if(st.brand) toast(`${st.brand} 할 일로 들어갑니다`); }
+    else if(act==="addBrand"){ addBrand(); }
+    else if(act==="sheetPhoto"){ closeSheet(); pickPhoto(); }
+    else if(act==="sheetClose"){ closeSheet(); }
+    else if(act==="page"){ setPage(Number(el.dataset.v)); }
+    else if(act==="listDone"){ openDrawer("done"); }
+    else if(act==="hdone"){ const m=getMemo(id); if(m){ await put(Object.assign({}, m, {done:!m.done})); toast(m.done?"다시 꺼냈습니다":"처리 완료"); } }
+    else if(act==="homeSleep") { openDrawer("menu"); go("sleep"); }
+    else if(act==="editOrder"){ st.editOrder = !st.editOrder; render(); if(!st.editOrder) saveSettings(); }
+    else if(act==="mv"){ const i=Number(el.dataset.i), d=Number(el.dataset.d), o=settings.order.slice(), j=i+d; if(j<0||j>=o.length) return; [o[i],o[j]]=[o[j],o[i]]; settings.order=o; render(); }
+    else if(act==="mapMode"){ settings.mapMode = el.dataset.v; render(); saveSettings(); }
+    else if(act==="goHome"){ setPage(0); }
+    else if(act==="gTheme"){ settings.graphDark = !settings.graphDark; render(); saveSettings(); }
+    else if(act==="open"){ st.open = st.open===id ? null : id; st.armed=null; render(); }
+    else if(act==="setcat"){ const m=getMemo(id); if(m){ const v=el.dataset.v; await put(Object.assign({}, m, {category:v, status:"sorted", quadrant:(v==="할일"||v==="아이디어"||m.qManual)?m.quadrant:null})); } }
+    else if(act==="setq"){ const m=getMemo(id); if(m){ const v=el.dataset.v||null; await put(Object.assign({}, m, {quadrant:v, qManual:true})); toast(v ? `${QS[v].name} 칸으로 옮겼습니다` : "칸에서 뺐습니다"); } }
+    else if(act==="done"){ const m=getMemo(id); if(m){ await put(Object.assign({}, m, {done:!m.done})); toast(m.done?"다시 꺼냈습니다":"처리 완료"); if(st.view==="memo") back(); else { st.open=null; render(); } } }
+    else if(act==="redo"){ organize(id, null); }
+    else if(act==="cal"){ const m=getMemo(id); if(m && m.event && !m.event.added) put(Object.assign({}, m, {event:Object.assign({}, m.event, {added:true})})); }
+    else if(act==="del"){
+      if(st.armed===id){ st.armed=null; st.open=null; await remove(id); toast("삭제했습니다"); if(st.view==="memo") back(); }
+      else { st.armed=id; render(); setTimeout(()=>{ if(st.armed===id){ st.armed=null; render(); } },3000); }
+    }
+  });
+  document.addEventListener("change", async e => {
+    const el = e.target; if(!el.dataset) return;
+    if(el.dataset.act==="tick"){ const m=getMemo(el.dataset.id); if(!m) return;
+      await put(Object.assign({}, m, {checklist:(m.checklist||[]).map((x,i)=> i===Number(el.dataset.i) ? {t:x.t, done:el.checked} : x)})); }
+    if(el.dataset.act==="clientin"){ const m=getMemo(el.dataset.id); if(!m) return;
+      const v=el.value.trim()||null; if(v!==m.client) await put(Object.assign({}, m, {client:v, brandFixed:!!v})); }
+    if(el.dataset.act==="titlein"){ const m=getMemo(el.dataset.id); if(!m) return; const v=el.value.trim();
+      if(v!==(m.title||"")){ await put(Object.assign({}, m, {title:v})); toast("제목을 수정했습니다"); } }
+    if(el.dataset.act==="rawin"){ const m=getMemo(el.dataset.id); if(!m) return; const v=el.value.trim();
+      if(v!==(m.raw||"")){ await put(Object.assign({}, m, {raw:v})); toast(sample ? "수정했습니다. 분류도 새로 맞추려면 AI로 다시 정리를 눌러주세요" : "수정했습니다"); } }
+    if(el.dataset.act==="duein"){ const m=getMemo(el.dataset.id); if(!m || !el.value) return;
+      if(el.value!==dueOf(m)){ await put(Object.assign({}, m, {due:el.value, dueFixed:true})); toast(`${dayLabel(el.value)} 할 일로 옮겼습니다`); } }
+  });
+  document.addEventListener("input", e => { if(e.target.id==="q"){ st.q = e.target.value; render(); } });
+
+  /* ---------- composer ---------- */
+  const ta = $("ta");
+  function syncComposer(){
+    ta.style.height="auto"; ta.style.height=Math.min(ta.scrollHeight, window.innerHeight*0.34)+"px";
+    $("save").disabled = !ta.value.trim() && !st.imgs.length;
+    const h = $("composer").offsetHeight; if(h) document.documentElement.style.setProperty("--compH", (h+8)+"px");
+  }
+  ta.addEventListener("input", syncComposer);
+  const finePointer = window.matchMedia && window.matchMedia("(pointer:fine)").matches;
+  ta.addEventListener("keydown", e => {
+    if(e.key !== "Enter" || e.shiftKey || e.isComposing || e.keyCode === 229) return;
+    if(!finePointer) return;
+    e.preventDefault();
+    if(!$("save").disabled) $("save").click();
+  });
+  window.addEventListener("resize", syncComposer);
+  function renderThumbs(){
+    $("thumbs").innerHTML = st.imgs.map((x,i)=>`<div class="thumb"><img src="${x.url}" alt="첨부 사진 ${i+1}"><button data-rm="${i}" aria-label="사진 빼기">×</button></div>`).join("");
+    syncComposer();
+  }
+  $("thumbs").addEventListener("click", e => { const b=e.target.closest("[data-rm]"); if(!b) return; const i=Number(b.dataset.rm); URL.revokeObjectURL(st.imgs[i].url); st.imgs.splice(i,1); renderThumbs(); });
+  function pickPhoto(){
+    if(sampleChecked && !imgLimits){ toast("이 화면에서는 사진을 AI가 읽을 수 없습니다. 내용을 글로 적어주세요."); return; }
+    $("file").click();
+  }
+  function setDue(d, fromCal){ st.due = d || null; st.calPicked = !!(d && fromCal); renderChips(); }
+  function renderChips(){
+    const chips = [];
+    if(st.due) chips.push(`<button class="cchip" data-act="pickDate">${esc(dayLabel(st.due))}<span class="x" data-act="clearDate" aria-label="오늘로 되돌리기">×</span></button>`);
+    if(st.brand) chips.push(`<button class="cchip b" data-act="clearBrand" aria-label="브랜드 빼기">${esc(st.brand)} <span class="x">×</span></button>`);
+    $("cchips").innerHTML = chips.join("");
+    syncComposer();
+  }
+  function openDatePicker(forDate){
+    if(typeof forDate!=="string") { st.moveId = null; forDate = null; }
+    const base = forDate || st.due || ymdKST(); const [y,m] = base.split("-").map(Number);
+    st.ds = {y, m:m-1}; st.sheet = true; renderDateSheet(); $("sheet").classList.add("on"); $("scrim").classList.add("on");
+  }
+  function renderDateSheet(){
+    const {y, m:mo} = st.ds, today = ymdKST(), mv = st.moveId && getMemo(st.moveId), sel = mv ? dueOf(mv) : (st.due || today);
+    const first = (new Date(y, mo, 1).getDay()+6)%7, days = new Date(y, mo+1, 0).getDate();
+    let cells = "";
+    for(let i=0;i<first;i++) cells += `<span></span>`;
+    for(let d=1; d<=days; d++){
+      const key = `${y}-${pad(mo+1)}-${pad(d)}`, dow = new Date(y, mo, d).getDay(), hn = dayName(key);
+      cells += `<button class="dsd ${dow===0||(hn&&hn.hol)?"sun":""} ${dow===6?"sat":""} ${key===today?"today":""} ${key===sel?"sel":""}" data-act="dsDay" data-v="${key}" ${key<today?"data-past":""}>${d}</button>`;
+    }
+    $("sheet").innerHTML = `<div class="grab"></div>
+      <div class="dshead"><h3>${y}년 ${mo+1}월</h3><button data-act="dsNav" data-v="-1" aria-label="이전 달">‹</button><button data-act="dsNav" data-v="1" aria-label="다음 달">›</button></div>
+      <div class="dsgrid">${"월화수목금토일".split("").map((w,i)=>`<span class="dsw ${i===5?"sat":""} ${i===6?"sun":""}">${w}</span>`).join("")}${cells}</div>
+      <div class="dsquick"><button data-act="dsDay" data-v="${today}">오늘</button><button data-act="dsDay" data-v="${ymdKST(new Date(Date.now()+86400000))}">내일</button><button data-act="dsDay" data-v="${ymdKST(new Date(Date.now()+7*86400000))}">다음 주</button></div>`;
+  }
+  $("dateIn").addEventListener("change", e => { const v = e.target.value; if(!v) return; setDue(v===ymdKST() ? null : v); toast(`${dayLabel(v)} 할 일로 들어갑니다`); });
+  $("calBtn").addEventListener("click", openDatePicker);
+  function renderSheet(){
+    const fa = foldersByArea();
+    $("sheet").innerHTML = `<div class="grab"></div><h3>어느 폴더에 넣을까요?</h3><p>고르면 이 메모가 그 폴더 할 일로 묶입니다. 안 골라도 AI가 알아서 넣습니다.</p>
+      ${AREAS.map(a => `<p class="sarea"><b class="adot" style="background:${AREA_COLOR[a]}"></b>${AREA_LABEL[a]}</p><div class="bgrid">${fa[a].sort((x,y)=>x.localeCompare(y,"ko")).map(b=>`<button class="bchip" data-act="pickBrand" data-v="${esc(b)}" aria-pressed="${st.brand===b}">${esc(b)}</button>`).join("") || `<span class="sempty" style="padding:4px 2px">없음</span>`}</div>`).join("")}
+      ${st.brand?`<div class="bgrid" style="margin-top:10px"><button class="bchip" data-act="pickBrand" data-v="">선택 안 함</button></div>`:""}
+      <div class="bnew"><input id="newBrand" placeholder="새 폴더 이름" maxlength="40"><button data-act="addBrand">추가</button></div>
+      <div class="apick" style="margin-top:8px">${AREAS.map(a=>`<button data-act="newArea" data-v="${a}" aria-pressed="${(st.newArea||"업무")===a}">${AREA_LABEL[a]}</button>`).join("")}</div>
+      <button class="sact" data-act="sheetPhoto">📷 <span>사진 · 캡처 첨부</span></button>`;
+  }
+  function openSheet(){ st.sheet=true; renderSheet(); $("sheet").classList.add("on"); $("scrim").classList.add("on"); }
+  function closeSheet(){ if(!st.sheet) return; st.sheet=false; $("sheet").classList.remove("on"); if(!st.side) $("scrim").classList.remove("on"); }
+  function addBrand(){
+    const inp = $("newBrand"); const v = (inp && inp.value || "").trim().slice(0,40); if(!v) { inp && inp.focus(); return; }
+    if(!settings.brands.includes(v)) { settings.brands = settings.brands.concat(v); }
+    setFolderArea(v, st.newArea||"업무"); saveSettings();
+    st.brand = v; closeSheet(); renderChips(); toast(`${AREA_LABEL[st.newArea||"업무"]} › ${v} 폴더를 만들었습니다`);
+  }
+  $("plus").addEventListener("click", openSheet);
+  document.addEventListener("keydown", e => { if(e.target && e.target.id==="sideBrandIn" && e.key==="Enter" && !e.isComposing && e.keyCode!==229){ e.preventDefault(); sideAdd(); } if(e.target && e.target.id==="newBrand" && e.key==="Enter" && !e.isComposing && e.keyCode!==229){ e.preventDefault(); addBrand(); } if(e.key==="Escape" && st.sheet) closeSheet(); });
+  function shrink(file){
+    return new Promise(res => {
+      const img=new Image(), url=URL.createObjectURL(file);
+      img.onload=()=>{ const max=1600; let w=img.width,h=img.height; const s=Math.min(1,max/Math.max(w,h)); w=Math.round(w*s); h=Math.round(h*s);
+        const cv=document.createElement("canvas"); cv.width=w; cv.height=h; cv.getContext("2d").drawImage(img,0,0,w,h); URL.revokeObjectURL(url); cv.toBlob(b=>res(b),"image/jpeg",0.85); };
+      img.onerror=()=>{ URL.revokeObjectURL(url); res(null); };
+      img.src=url;
+    });
+  }
+  $("file").addEventListener("change", async e => {
+    const max = imgLimits && imgLimits.maxCount ? imgLimits.maxCount : 4;
+    for(const f of [...e.target.files]){ if(st.imgs.length>=max){ toast(`사진은 한 번에 ${max}장까지입니다`); break; } const b=await shrink(f); if(b) st.imgs.push({blob:b, url:URL.createObjectURL(b)}); }
+    e.target.value=""; renderThumbs();
+  });
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var rec = null; let recBase = "";
+  function micOff(){ rec=null; $("mic").classList.remove("rec"); renderHome(); }
+  $("mic").addEventListener("click", () => {
+    if(rec){ const r = rec; r.onend = null; try{ r.stop(); }catch(e){} setTimeout(()=>{ try{ r.abort(); }catch(e){} }, 1500); micOff(); toast("음성 입력을 멈췄습니다"); return; }
+    if(!SR){ toast("이 화면에선 음성 입력이 안 됩니다. 키보드의 마이크 버튼으로 말해 주세요."); ta.focus(); return; }
+    try{
+      rec = new SR(); rec.lang="ko-KR"; rec.interimResults=true; rec.continuous=true;
+      recBase = ta.value ? ta.value.replace(/\s*$/," ") : "";
+      rec.onresult = ev => { let t=""; for(let i=0;i<ev.results.length;i++) t+=ev.results[i][0].transcript; ta.value=recBase+t; syncComposer(); };
+      rec.onerror = ev => toast(ev.error==="not-allowed"||ev.error==="service-not-allowed" ? "마이크 권한이 막혀 있습니다. 키보드의 마이크 버튼을 써주세요." : "음성 인식이 끊겼습니다. 다시 눌러주세요.");
+      rec.onend = micOff;
+      rec.start(); $("mic").classList.add("rec"); $("hint").textContent="듣는 중 · 다시 누르면 멈춤";
+    }catch(err){ rec=null; toast("음성 입력을 시작하지 못했습니다. 키보드 마이크를 써주세요."); }
+  });
+
+  $("save").addEventListener("click", async () => {
+    if(rec) rec.stop();
+    const raw = ta.value.trim(), imgs = st.imgs.slice();
+    if(!raw && !imgs.length) return;
+    const brand = st.brand, due = st.due || ymdKST();
+    const m = {id:uid(), raw, createdAt:Date.now(), due, dueFixed:!!st.due, brandFixed:!!brand, area: brand ? folderAreaOf(brand) : null, status:sample?"working":"raw", category:null, client:brand||null, title:"", summary:"", tags:[], checklist:[], event:null, quadrant:null, related:[], extracted:"", hasPhoto:imgs.length, done:false, err:null};
+    ta.value=""; st.imgs=[]; renderThumbs(); ta.blur();
+    st.brand = null; if(!(st.page===1 && st.calPicked)) st.due = null; renderChips();
+    if(due !== ymdKST() || brand) toast([brand, dayLabel(due)+" 할 일"].filter(Boolean).join(" · ")+"로 넣었습니다");
+    sessionIds.push(m.id);
+    await put(m);
+    if(sample) organize(m.id, imgs.length ? imgs.map(x=>x.blob) : null).finally(()=>imgs.forEach(x=>URL.revokeObjectURL(x.url)));
+    else { toast(imgs.length ? "AI가 꺼져 있어 사진 내용은 저장되지 않았습니다." : "저장했습니다"); imgs.forEach(x=>URL.revokeObjectURL(x.url)); }
+  });
+
+  greet(); renderChips(); render();
+  ready.then(() => setTimeout(() => { seedFolders(); render(); }, 1500));
+  setupStore(); setupSample();
+  setInterval(greet, 600000);
+})();
+</script>
+</body></html>
