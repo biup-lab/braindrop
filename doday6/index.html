@@ -291,10 +291,10 @@ button, input { font-family: inherit; }
   // ---------- 설정: 올리기 전에 여기만 채우면 됩니다 (README.md 참고) ----------
   const CONFIG = {
     SHEET_URL: "",          // 구글 Apps Script 웹 앱 주소 (https://script.google.com/macros/s/.../exec)
-    KAKAO_URL: "",          // 카카오톡 채널 채팅 주소 (예: https://pf.kakao.com/_xxxxx/chat)
+    KAKAO_URL: "https://pf.kakao.com/_KxlkrX/chat",   // 카카오톡 채널 채팅 주소
     PRIVACY_URL: "https://doday6.com/legal/privacy.html",
     HOME_URL: "https://www.doday6.com/site/",
-    RETENTION: "수집일로부터 1년",   // 개인정보 보유 기간. 처리방침과 같게 적어주세요
+    RETENTION: "수집일로부터 6개월",   // 개인정보 보유 기간. 처리방침과 같게 적어주세요
     TOTAL_SEATS: 10,
     TRIAL: "2개월",
     CALL_DAYS: 3            // 신청 후 연락드리는 기한(일)
@@ -323,9 +323,9 @@ button, input { font-family: inherit; }
   const MISS = ["0~1명", "2~3명", "4~5명", "6명 이상"];
   const PAPER = "종이 시험을 보고 직접 채점해요", NO_LTEST = "따로 하지 않아요";
   const WORRY_ANS = {
-    "기존 자료를 옮기는 일": "체험 기간에는 지금 쓰시는 프로그램을 그대로 두고 <strong>함께</strong> 써보실 수 있어요.",
-    "선생님·학생이 적응하는 것": "원장님과 선생님은 <strong>폰으로</strong> 관리하고, 학생은 보상과 주간 순위로 매일 들어올 이유가 생겨요.",
-    "학부모님 반응": "학부모님은 앱을 깔지 않고 <strong>카톡 알림톡</strong>으로 받으세요. 새로 배우실 것이 없어요.",
+    "기존 자료를 옮기는 일": "필요한 프로그램만 켜서 쓰는 방식이라, 지금 쓰시는 것을 그대로 두고 <strong>함께</strong> 써보실 수 있어요.",
+    "선생님·학생이 적응하는 것": "원장님이 하실 일은 <strong>아침에 안 한 아이 확인</strong>과 <strong>월요일 1등 칭찬</strong> 두 가지예요. 아이들은 코인과 주간 순위로 매일 들어올 이유가 생겨요.",
+    "학부모님 반응": "학부모님은 앱 설치나 로그인 없이 <strong>카톡 알림톡 링크</strong>로 보세요. 새로 배우실 것이 없어요.",
     "비용이 늘어나는 것": `체험 ${CONFIG.TRIAL}은 무료이고, 알림톡 발송비는 <strong>기본료에 포함</strong>돼 있어요.`,
     "써보다 흐지부지될까 봐": "체험이 끝난 뒤 이어서 쓸지는 <strong>원장님이 정하시면</strong> 돼요."
   };
@@ -748,7 +748,7 @@ button, input { font-family: inherit; }
     else if (A.report === AUTO) s1.push("학부모님 소식은 이미 프로그램에서 자동으로 나가고 있어요.");
     else if (A.report === MEET) s1.push("학부모님은 상담 때 아이 소식을 들으세요. 상담과 상담 사이에는 소식이 뜸할 수 있어요.");
     else if (A.report === NO_REPORT) s1.push("학부모님께는 따로 학습 소식을 보내지 않고 계세요.");
-    const d1 = "단어, 문법, 원서, 레벨테스트, 출결, 학부모 보고를 <strong>한 곳</strong>에서 봐요. 학부모님은 앱 설치 없이 <strong>카톡 알림톡</strong>으로 받으시고, 발송비는 기본료에 포함돼 있어요.";
+    const d1 = "단어(매일보카), 문법(그래머헌터), 원서(리딩원정대), 레벨테스트, 출결, 일일보고서가 <strong>한 곳</strong>에 있고, 필요한 것만 켜서 써요. 일일보고서와 주간 성적은 <strong>카톡 알림톡</strong>으로 가고, 학부모님은 로그인 없이 링크로 보세요. 발송비는 기본료에 포함돼 있어요.";
 
     // 02 숙제와 채점
     const s2 = [];
@@ -760,7 +760,7 @@ button, input { font-family: inherit; }
       if (fix.includes("학부모님께 연락드려요")) s2.push("학부모님 연락도 한 분씩 직접 하고 계세요.");
     }
     if (A.tgrade) s2.push(`채점과 확인에 하루 ${esc(A.tgrade)}가 들어요.`);
-    const d2 = "숙제를 안 한 학생은 그날 <strong>학원 홈에 빨갛게</strong> 뜨고, 학부모님께는 <strong>알림톡이 자동으로</strong> 가요. 단어 시험 결과는 바로 남고, 보상과 주간 순위로 학생이 매일 할 이유가 생겨요.";
+    const d2 = "안 한 아이는 아침에 <strong>오늘 학습 현황</strong>에서 한눈에 보여요. 공부한 만큼 코인이 쌓이고 반 순위는 <strong>월요일마다 새로</strong> 시작해서, 지난주에 못 한 아이도 다시 1등 후보가 돼요.";
 
     // 03 레벨테스트
     const s3 = [({
@@ -769,11 +769,11 @@ button, input { font-family: inherit; }
       "면담이나 구두로 판단해요": "면담으로 보시면 결과를 학부모님께 종이로 남겨 드리기 어려워요.",
       [NO_LTEST]: "따로 레벨테스트 없이 상담하고 계세요."
     })[A.ltest]];
-    const d3 = "레벨테스트가 <strong>프로그램 안에</strong> 들어 있어요. 단어, 문법, 원서와 같은 곳에서 보고, 결과가 학생 기록으로 이어져요.";
+    const d3 = "레벨테스트는 단어·문법·독해·듣기 <strong>4영역</strong>이고, 끝나면 <strong>결과지가 바로</strong> 나와요. 학부모님께 결과지 링크를 보내 드릴 수 있고, 기본료에 포함돼 있어요.";
 
     // 04 시간
     const s4 = [`채점·확인${t.reportMonth ? "과 학부모님 문자" : ""}에 한 달 약 <strong>${t.month}시간</strong>, 1년이면 약 ${t.year}시간이 들어요.`];
-    const d4 = "DoDay6 안에서 내는 숙제와 시험은 결과가 <strong>자동으로</strong> 정리되고 학부모님께 알림톡으로 나가요. 그만큼을 수업과 상담에 쓰실 수 있어요.";
+    const d4 = "단어·문법·원서 결과는 <strong>일일보고서</strong>에 모이고, 보고서는 출석·과제·태도는 누르기만, 수업·숙제·한마디만 쓰면 끝나요. 원장님이 하실 일은 <strong>아침에 안 한 아이 확인</strong>, <strong>월요일 1등 칭찬</strong> 두 가지예요.";
 
     // 05 비용
     const s5 = [];
@@ -784,7 +784,7 @@ button, input { font-family: inherit; }
       s5.push(`프로그램 ${n}개에 한 달 약 <strong>${man(c.total)}만 원</strong>, 1년이면 약 ${man(c.total * 12)}만 원이에요.`);
       if (c.per) s5.push(`재원생 1명당 한 달 약 ${won(c.per)}이에요.`);
     }
-    const d5 = "단어, 문법, 원서, 레벨테스트, 출결, 학부모 알림이 <strong>한 프로그램</strong>에 들어 있어요. 지금 쓰시는 것 중 무엇을 대신할 수 있는지는 체험하면서 직접 견줘 보세요.";
+    const d5 = "단어, 문법, 원서, 레벨테스트, 출결, 일일보고서가 <strong>한 프로그램</strong>에 들어 있고, 알림톡 발송비와 레벨테스트 결과지도 기본료에 포함돼요. 지금 쓰시는 것 중 무엇을 대신할 수 있는지는 체험하면서 직접 견줘 보세요.";
 
     // 06 걱정하시는 부분
     const s6 = worry.map(w => WORRY_ANS[w]);
@@ -861,7 +861,7 @@ button, input { font-family: inherit; }
       <div class="eyebrow">FREE TRIAL</div>
       <div class="title-grad">${full ? "이번 체험은 모두 찼어요" : `선착순 ${CONFIG.TOTAL_SEATS}개 학원,<br>${esc(CONFIG.TRIAL)} 무료로 함께해요`}</div>
       ${full ? `<div class="desc">대기 신청을 남겨주시면 자리가 나는 순서대로 연락드릴게요.</div>`
-        : `<div class="desc">${toolCount(A.tools) ? "지금 쓰시는 프로그램과 나란히 두고, 원장님 학원에서 직접 비교해 보세요." : "지금 하시는 방식은 그대로 두고, 원장님 학원에서 직접 써보세요."}</div>${left != null ? `<div class="seats"><p>남은 자리 <b>${left}</b> / ${CONFIG.TOTAL_SEATS}</p></div>` : ""}`}
+        : `<div class="desc">${toolCount(A.tools) ? "지금 쓰시는 프로그램과 나란히 두고, 원장님 학원에서 직접 비교해 보세요." : "지금 하시는 방식은 그대로 두고, 원장님 학원에서 직접 써보세요."}<br>중계동 영어학원 원장님이 만들어, 재원생 200명이 매일 쓰고 있어요.</div>${left != null ? `<div class="seats"><p>남은 자리 <b>${left}</b> / ${CONFIG.TOTAL_SEATS}</p></div>` : ""}`}
       <form class="form" id="apply" novalidate>
         <div class="fixed"><span>${esc(name || "학원 이름 없음")}${dong ? " · " + esc(dong) : ""}</span><span>재원생 ${esc(A.students || "-")}</span></div>
         <div class="inp"><input id="owner" maxlength="20" autocomplete="name" placeholder="원장님 성함 (선택)" aria-label="원장님 성함 (선택)" value="${esc(owner)}"></div>
