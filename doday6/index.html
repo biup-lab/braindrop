@@ -319,6 +319,7 @@ button, input { font-family: inherit; }
   const NONE_FIX = "따로 하지 않아요";
   const NONE_WORRY = "특별히 없어요";
   const DIRECT = "문자·카톡으로 직접 보내요", AUTO = "프로그램에서 자동으로 나가요", MEET = "상담할 때만 말씀드려요", NO_REPORT = "따로 알리지 않아요";
+  const INTENT_NOW = "네, 바로 써보고 싶어요", INTENT_COMPARE = "지금 쓰는 것과 비교해 보고 싶어요";
   const MISS = ["0~1명", "2~3명", "4~5명", "6명 이상"];
   const PAPER = "종이 시험을 보고 직접 채점해요", NO_LTEST = "따로 하지 않아요";
   const WORRY_ANS = {
@@ -370,8 +371,8 @@ button, input { font-family: inherit; }
       opts: ["제가 직접 정해요", "선생님들과 의견을 나눠 정해요", "대표님·본사와 함께 정해요"] },
     { id: "timing", ch: 5, title: "새 방식을 써보신다면 언제가 좋으세요?", kind: "single",
       opts: ["지금 바로 써보고 싶어요", "올해 안에 시작하고 싶어요", "신학기(1~2월) 전에 준비하고 싶어요", "아직은 둘러보는 중이에요"] },
-    { id: "room", ch: 5, title: "이번 달, 새 프로그램을 직접 써볼 여유가 있으세요?", kind: "single",
-      opts: ["네, 바로 써볼 수 있어요", "일주일에 한두 번은 볼 수 있어요", "이번 달은 바쁘고 다음 달이 좋아요", "당분간은 여유가 없어요"] }
+    { id: "intent", ch: 5, title: `${CONFIG.TRIAL} 무료 체험, 해보시겠어요?`, kind: "single",
+      opts: [INTENT_NOW, INTENT_COMPARE, "어떤 건지 먼저 보고 정할게요", "지금은 괜찮아요"] }
   ];
 
   // ---------- 파일럿 우선순위 점수 (시트에만 저장, 화면에는 안 보임) ----------
@@ -382,7 +383,7 @@ button, input { font-family: inherit; }
     decider: { "제가 직접 정해요": 3, "선생님들과 의견을 나눠 정해요": 2, "대표님·본사와 함께 정해요": 0 },
     timing: { "지금 바로 써보고 싶어요": 3, "올해 안에 시작하고 싶어요": 2, "신학기(1~2월) 전에 준비하고 싶어요": 1, "아직은 둘러보는 중이에요": 0 },
     satisfy: { "새 방식을 찾고 있어요": 2, "바꾸고 싶은 부분이 있어요": 2, "괜찮은데 손이 많이 가요": 1, "대체로 괜찮아요": 0, "지금 그대로가 좋아요": 0 },
-    room: { "네, 바로 써볼 수 있어요": 2, "일주일에 한두 번은 볼 수 있어요": 1, "이번 달은 바쁘고 다음 달이 좋아요": 0, "당분간은 여유가 없어요": 0 }
+    intent: { [INTENT_NOW]: 2, [INTENT_COMPARE]: 2, "어떤 건지 먼저 보고 정할게요": 1, "지금은 괜찮아요": 0 }
   };
   function pilotScore() {
     let s = 0;
@@ -480,7 +481,7 @@ button, input { font-family: inherit; }
       type: A.type, grades: list("grade"), students: A.students, staff: A.staff,
       tools: list("tools"), cost: A.cost, report: A.report, rweek: A.rweek,
       hw: list("hw"), miss: A.miss, hwfix: list("hwfix"), tgrade: A.tgrade, ltest: A.ltest,
-      satisfy: A.satisfy, worry: list("worry"), decider: A.decider, timing: A.timing, room: A.room,
+      satisfy: A.satisfy, worry: list("worry"), decider: A.decider, timing: A.timing, intent: A.intent,
       hoursPerMonth: t.month, costPerStudent: c.per ? Math.round(c.per) : "",
       waitlist: submitted && submitted.waitlist ? "예" : "",
       utm_source: src.source, utm_medium: src.medium, utm_campaign: src.campaign, referrer: src.referrer,
@@ -860,7 +861,7 @@ button, input { font-family: inherit; }
       <div class="eyebrow">FREE TRIAL</div>
       <div class="title-grad">${full ? "이번 체험은 모두 찼어요" : `선착순 ${CONFIG.TOTAL_SEATS}개 학원,<br>${esc(CONFIG.TRIAL)} 무료로 함께해요`}</div>
       ${full ? `<div class="desc">대기 신청을 남겨주시면 자리가 나는 순서대로 연락드릴게요.</div>`
-        : `<div class="desc">지금 쓰시는 방식은 그대로 두고, 원장님 학원에서 직접 써보세요.</div>${left != null ? `<div class="seats"><p>남은 자리 <b>${left}</b> / ${CONFIG.TOTAL_SEATS}</p></div>` : ""}`}
+        : `<div class="desc">${A.intent === INTENT_COMPARE ? "지금 쓰시는 프로그램과 나란히 두고, 원장님 학원에서 직접 비교해 보세요." : "지금 쓰시는 방식은 그대로 두고, 원장님 학원에서 직접 써보세요."}</div>${left != null ? `<div class="seats"><p>남은 자리 <b>${left}</b> / ${CONFIG.TOTAL_SEATS}</p></div>` : ""}`}
       <form class="form" id="apply" novalidate>
         <div class="fixed"><span>${esc(name || "학원 이름 없음")}${dong ? " · " + esc(dong) : ""}</span><span>재원생 ${esc(A.students || "-")}</span></div>
         <div class="inp"><input id="owner" maxlength="20" autocomplete="name" placeholder="원장님 성함 (선택)" aria-label="원장님 성함 (선택)" value="${esc(owner)}"></div>

@@ -42,7 +42,7 @@ const FIELDS = [
   ["worry", "걱정"],
   ["decider", "결정"],
   ["timing", "도입 시기"],
-  ["room", "이번 달 써볼 시간"],
+  ["intent", "무료 체험 의향"],
   ["utm_source", "utm_source"],
   ["utm_medium", "utm_medium"],
   ["utm_campaign", "utm_campaign"],
