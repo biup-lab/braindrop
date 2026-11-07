@@ -106,7 +106,16 @@ function doGet(e) {
 function sheet_() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sh = ss.getSheetByName(SHEET_NAME);
-  if (!sh) sh = ss.insertSheet(SHEET_NAME);
+  if (!sh) {
+    // 머리글만 미리 넣어 둔 첫 탭이 있으면 그 탭을 '응답'으로 쓴다
+    const first = ss.getSheets()[0];
+    if (first && (first.getLastRow() === 0 || first.getRange(1, 1).getValue() === FIELDS[0][1])) {
+      sh = first.setName(SHEET_NAME);
+      if (sh.getLastRow() === 1) sh.setFrozenRows(1);
+    } else {
+      sh = ss.insertSheet(SHEET_NAME);
+    }
+  }
   if (sh.getLastRow() === 0) {
     sh.appendRow(FIELDS.map(f => f[1]));
     sh.setFrozenRows(1);
