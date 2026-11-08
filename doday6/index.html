@@ -1,0 +1,923 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DoDay6 영어 관리 점검</title>
+<meta name="description" content="영어학원 원장님을 위한 무료 관리 점검. 객관식, 약 2분이면 우리 학원 맞춤 진단 리포트를 바로 보여드려요.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="영어학원 원장님을 위한 관리 점검">
+<meta property="og:description" content="객관식, 약 2분. 우리 학원 맞춤 진단 리포트를 바로 보여드려요.">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+<style>
+/* 레이아웃: 흰 화면 한가운데 질문 하나. 로고는 왼쪽 위, 뒤로 가기는 왼쪽 아래, 장 진행은 아래 가운데. 리포트는 가운데 정렬 한 열. */
+:root {
+  --bg: #ffffff;
+  --ink: #141a24;
+  --text: #46536b;
+  --muted: #93a0b5;
+  --faint: #b6bfcd;
+  --line: #eef1f7;
+  --dash: #dfe4ee;
+  --navy: #1e3a8a;
+  --blue: #2563eb;
+  --blue-d: #1d4ed8;
+  --sky: #38bdf8;
+  --soft: #f7fafd;
+  --kakao: #fee500;
+  --kakao-ink: #191600;
+  --grad: linear-gradient(100deg, #1e3a8a 0%, #2563eb 45%, #38bdf8 100%);
+  --grad-btn: linear-gradient(100deg, #1e3a8a 0%, #2563eb 55%, #38bdf8 100%);
+  --grad-well: linear-gradient(100deg, #eaf1ff 0%, #e2ebfb 50%, #e7f6ff 100%);
+  --grad-box: linear-gradient(150deg, #f3f8ff 0%, #eef3fc 55%, #f2fbff 100%);
+  --ring: 0 0 0 1px rgba(56,189,248,.3), 0 10px 26px -12px rgba(37,99,235,.45);
+  --pill-shadow: 0 0 0 1px rgba(56,189,248,.4), 0 1px 2px rgba(30,58,138,.12), 0 8px 18px -8px rgba(37,99,235,.45);
+  --btn-shadow: 0 2px 4px rgba(30,58,138,.18), 0 16px 32px -14px rgba(37,99,235,.7);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --ease: cubic-bezier(.22,.75,.25,1);
+  --spring: cubic-bezier(.34,1.56,.44,1);
+  color-scheme: light;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; }
+html, body { min-height: 100%; }
+body {
+  position: relative; margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font); font-size: 15px; letter-spacing: -0.012em; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; word-break: keep-all; overflow-wrap: anywhere;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+button, input { font-family: inherit; }
+:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; border-radius: 12px; }
+
+/* 고정 요소 */
+.logo {
+  position: absolute; z-index: 4; top: calc(26px + env(safe-area-inset-top, 0px)); left: max(28px, calc(env(safe-area-inset-left, 0px) + 16px));
+  font-size: 17px; font-weight: 800; letter-spacing: -0.04em; text-decoration: none; opacity: .5; transition: opacity .25s ease;
+  background-image: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--blue);
+  background-color: transparent; border: 0; padding: 0; cursor: pointer;
+}
+.logo:hover { opacity: .85; }
+.back {
+  position: fixed; z-index: 4; bottom: calc(28px + env(safe-area-inset-bottom, 0px)); left: max(24px, calc(env(safe-area-inset-left, 0px) + 12px));
+  display: flex; padding: 8px; border: 0; background: #fff; box-shadow: 0 4px 14px -6px rgba(30,58,138,.25); border-radius: 999px; color: var(--navy); opacity: .7; cursor: pointer;
+  transition: opacity .25s ease, transform .3s cubic-bezier(.2,.8,.2,1);
+}
+.back:hover { opacity: 1; transform: translateX(-4px); }
+.dashes {
+  position: fixed; z-index: 3; left: 50%; transform: translateX(-50%); bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+  display: flex; gap: 5px; align-items: center;
+}
+.dashes span { width: 14px; height: 3px; border-radius: 999px; background: var(--dash); transition: width .4s var(--ease), background .4s ease; }
+.dashes span.done { background: #b9cdf5; }
+.dashes span.on { width: 26px; background-image: var(--grad); }
+.chap { position: fixed; z-index: 3; left: 50%; transform: translateX(-50%); bottom: calc(52px + env(safe-area-inset-bottom, 0px)); font-size: 11px; font-weight: 700; letter-spacing: .06em; color: var(--faint); white-space: nowrap; }
+
+/* 화면 */
+#stage { min-height: 100vh; min-height: 100svh; display: flex; overflow-x: clip; }
+.screen {
+  width: 100%; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; justify-content: center;
+  padding-block: 96px 128px;
+}
+.screen.scroll { align-items: flex-start; }
+.col { width: 100%; max-width: 460px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
+.col.wide { max-width: 620px; gap: 46px; }
+.in { animation: pageIn .55s var(--ease) both; }
+.in.rev { animation-name: pageInRev; }
+.out { animation: pageOut .3s ease both; }
+.out.rev { animation-name: pageOutRev; }
+@keyframes pageIn { from { opacity: 0; transform: translateX(56px); } to { opacity: 1; transform: none; } }
+@keyframes pageInRev { from { opacity: 0; transform: translateX(-56px); } to { opacity: 1; transform: none; } }
+@keyframes pageOut { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(-56px); } }
+@keyframes pageOutRev { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(56px); } }
+@keyframes pop { 0% { transform: translateY(10px) scale(.94); } 60% { transform: translateY(-5px) scale(1.03); } 100% { transform: none; } }
+@keyframes shimmer { from { background-position: 0% 50%; } to { background-position: 200% 50%; } }
+
+/* 질문 머리 */
+.ask { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; font-size: 16px; font-weight: 600; letter-spacing: -0.01em; color: var(--muted); }
+.ask .who { color: var(--blue-d); font-size: 15px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 2px; }
+.ask.soft .who { color: var(--blue); font-size: 14px; font-weight: 700; opacity: .5; }
+.ask .q { color: var(--ink); font-size: 19px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.45; text-wrap: balance; max-width: 420px; }
+.ask .help { font-size: 12.5px; font-weight: 500; color: var(--faint); margin-top: 2px; }
+
+/* 하나 고르기: 세로 우물 + 흰 알약 */
+.well {
+  position: relative; display: flex; flex-direction: column; padding: 6px; border-radius: 22px;
+  background-image: var(--grad-well); box-shadow: inset 0 1px 2px rgba(30,58,138,.07), 0 24px 48px -28px rgba(37,99,235,.35);
+  min-width: 200px; max-width: 100%;
+}
+.well .pill { position: absolute; left: 6px; right: 6px; top: 6px; border-radius: 999px; background: #fff; box-shadow: var(--pill-shadow); transition: transform .42s cubic-bezier(.2,.85,.2,1), height .3s ease, opacity .25s ease; opacity: 0; pointer-events: none; }
+.well button {
+  position: relative; z-index: 1; border: 0; background: transparent; cursor: pointer; padding: 11px 22px;
+  font-size: 14px; font-weight: 600; letter-spacing: -0.01em; color: #7b8798; border-radius: 999px; text-align: center;
+  transition: color .3s ease, transform .4s var(--spring);
+}
+.well button:hover { color: var(--navy); }
+.well button[aria-pressed="true"] { color: var(--blue-d); font-weight: 800; transform: scale(1.04); }
+
+/* 여러 개 고르기: 칩 */
+.chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; width: 100%; max-width: 420px; }
+.chips button {
+  border: 0; cursor: pointer; padding: 13px 10px; border-radius: 16px; font-size: 13.5px; font-weight: 600; color: #7b8798; line-height: 1.35; text-align: center; word-break: keep-all;
+  background-image: var(--grad-well); box-shadow: inset 0 1px 2px rgba(30,58,138,.06); transition: transform .35s var(--spring), box-shadow .3s ease, color .3s ease, background .3s ease;
+}
+.chips button:hover { transform: translateY(-2px); color: var(--navy); }
+.chips button[aria-pressed="true"] { background: #fff; color: var(--blue-d); font-weight: 800; box-shadow: var(--pill-shadow); }
+.chips.colflow { grid-auto-flow: column; grid-template-rows: repeat(2, auto); }
+.chips button:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+/* 입력 */
+.inp { position: relative; width: 100%; max-width: 300px; }
+.inp input {
+  width: 100%; border: 0; border-radius: 999px; padding: 14px 58px 14px 22px; font-size: 15px; font-weight: 600; color: var(--blue-d);
+  background-image: var(--grad-well); box-shadow: inset 0 1px 2px rgba(30,58,138,.09);
+}
+.inp input:focus { outline: none; box-shadow: inset 0 1px 2px rgba(30,58,138,.09), 0 0 0 2px rgba(56,189,248,.45); }
+.inp input::placeholder { color: var(--blue-d); opacity: .3; }
+.inp .go { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); }
+
+/* 원형 다음 버튼 */
+.go {
+  width: 38px; height: 38px; border-radius: 999px; border: 0; background: #fff; color: var(--blue); cursor: pointer;
+  display: grid; place-items: center; box-shadow: var(--pill-shadow); transition: transform .35s var(--spring), opacity .3s ease;
+}
+.go:hover { transform: translateX(2px) scale(1.06); }
+.inp .go:hover { transform: translateY(-50%) translateX(2px) scale(1.06); }
+.go:disabled { opacity: .35; cursor: default; transform: none; }
+.inp .go:disabled { transform: translateY(-50%); }
+.next { border: 0; background: #eef3fc; box-shadow: 0 0 0 1px rgba(56,189,248,.25); border-radius: 999px; width: 46px; height: 46px; align-items: center; justify-content: center; color: var(--blue); padding: 0; cursor: pointer; display: flex; transition: transform .3s var(--spring), opacity .3s ease, background .25s ease; }
+.next:hover { background: #e2ebfb; transform: translateX(4px); }
+
+/* 첫 화면 */
+.hero { position: relative; gap: 0; text-align: center; isolation: isolate; }
+.hero::before {
+  content: ""; position: absolute; z-index: -1; left: 50%; top: 42%; width: 420px; height: 300px; max-width: 110vw; transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(56,189,248,.16), rgba(37,99,235,.06) 55%, transparent 100%); pointer-events: none;
+}
+.hero > * { animation: heroIn .9s var(--ease) both; animation-delay: calc(var(--d, 0) * 90ms); }
+@keyframes heroIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.hero .eyebrow { margin-bottom: 26px; }
+.hero .lead { font-size: 15px; font-weight: 500; letter-spacing: -0.01em; color: #a6b0be; margin-bottom: 6px; }
+.hero .title-grad { font-size: clamp(36px, 10vw, 46px); letter-spacing: -0.045em; line-height: 1.15; }
+.hero .sub { margin: 18px 0 36px; font-size: 14px; line-height: 1.75; color: var(--muted); font-weight: 500; }
+.hero .meta { margin-top: 22px; display: flex; align-items: center; gap: 9px; font-size: 11.5px; font-weight: 600; letter-spacing: .01em; color: var(--faint); }
+.hero .meta i { width: 3px; height: 3px; border-radius: 999px; background: #cfd6e2; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .16em; color: var(--faint); }
+.title-grad {
+  font-size: clamp(26px, 6.4vw, 34px); font-weight: 800; letter-spacing: -0.035em; line-height: 1.3; text-wrap: balance;
+  background-image: linear-gradient(100deg, #1e3a8a 0%, #2563eb 35%, #38bdf8 55%, #2563eb 75%, #1e3a8a 100%); background-size: 220% 100%;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--blue-d);
+  animation: shimmer 3.6s linear infinite;
+}
+.cta {
+  border: 0; cursor: pointer; padding: 15px 38px; border-radius: 999px; font-size: 14.5px; font-weight: 800; letter-spacing: -0.015em; color: #fdfdff;
+  background-image: var(--grad-btn); box-shadow: var(--btn-shadow); transition: transform .35s cubic-bezier(.34,1.4,.44,1), box-shadow .35s ease;
+}
+.cta:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 0 0 3px rgba(56,189,248,.45), 0 4px 8px rgba(30,58,138,.22), 0 24px 46px -14px rgba(37,99,235,.85); }
+.cta:disabled { opacity: .5; cursor: default; transform: none; }
+.hero .cta { background-image: linear-gradient(100deg, #1e3a8a 0%, #2563eb 35%, #38bdf8 55%, #2563eb 75%, #1e3a8a 100%); background-size: 220% 100%; }
+.hero .title-grad, .hero .cta { animation: heroIn .9s var(--ease) both, shimmer 3.6s linear infinite; animation-delay: calc(var(--d, 0) * 90ms), 0s; }
+.plain { font-size: min(16px, 4.3vw); font-weight: 600; letter-spacing: -0.01em; line-height: 1.55; color: var(--muted); text-wrap: balance; text-align: center; }
+.intro { gap: 6px; text-align: center; }
+.intro .next { margin-top: 14px; }
+
+/* 리포트 받기 */
+.skip { border: 0; background: none; padding: 6px 10px; font-size: 13px; font-weight: 600; color: var(--faint); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.skip:hover { color: var(--blue-d); }
+
+/* 리포트 공통 */
+.head { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+.head .nm { font-size: 15px; font-weight: 500; color: #a6b0be; }
+.head .title-grad { font-size: 24px; }
+
+.tiles { width: 100%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.tile { padding: 16px 10px 14px; border-radius: 14px; background: var(--soft); display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; min-width: 0; }
+.tile b { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; background-image: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--blue-d); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tile b small { font-size: 12px; font-weight: 700; }
+.tile span { font-size: 11.5px; font-weight: 600; color: #7b8798; line-height: 1.4; }
+
+.sec { width: 100%; display: flex; flex-direction: column; gap: 16px; padding-bottom: 38px; border-bottom: 1px solid var(--line); }
+.sec-h { display: flex; align-items: baseline; gap: 10px; }
+.sec-h .no { font-size: 12px; font-weight: 700; letter-spacing: .04em; color: #c2cad7; }
+.sec-h .tt { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
+.picks { display: flex; flex-wrap: wrap; gap: 7px; }
+.picks span {
+  padding: 7px 13px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: -0.01em;
+  background-image: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--blue-d);
+  box-shadow: 0 0 0 1px rgba(56,189,248,.35);
+}
+.paras { display: flex; flex-direction: column; gap: 9px; padding-left: 2px; }
+.para { display: flex; align-items: baseline; gap: 9px; }
+.para::before { content: ""; width: 5px; height: 5px; border-radius: 999px; flex: none; transform: translateY(-2px); background-image: linear-gradient(140deg, #38bdf8 0%, #2563eb 70%); }
+.para span { line-height: 1.75; text-wrap: pretty; font-size: 14.5px; color: var(--text); font-weight: 500; }
+.para span strong { color: var(--ink); font-weight: 800; }
+.act { display: flex; flex-direction: column; gap: 7px; margin-top: 4px; padding: 17px 19px; border-radius: 14px; background-image: linear-gradient(150deg, #f3f8ff 0%, #eef3fc 100%); box-shadow: inset 0 0 0 1px rgba(37,99,235,.1); }
+.act b { font-size: 11.5px; font-weight: 800; letter-spacing: .07em; color: var(--sky); }
+.act span { font-size: 14px; line-height: 1.75; color: var(--text); text-wrap: pretty; }
+.act span strong { color: var(--blue-d); font-weight: 800; }
+.verdict { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 24px 22px; border-radius: 18px; background: #fff; box-shadow: var(--ring); text-align: center; }
+.verdict small { font-size: 11px; font-weight: 800; letter-spacing: .08em; color: var(--sky); margin-bottom: 2px; }
+.verdict p { margin: 0; font-size: 16px; font-weight: 700; line-height: 1.65; letter-spacing: -0.02em; color: var(--ink); text-wrap: balance; }
+.verdict p em { font-style: normal; font-weight: 800; color: var(--blue-d); }
+.verdict .note { font-size: 12.5px; font-weight: 500; color: var(--muted); margin-top: 4px; }
+
+.todo { width: 100%; display: flex; flex-direction: column; gap: 16px; padding: 26px 26px 28px; border-radius: 20px; background-image: var(--grad-box); box-shadow: inset 0 0 0 1px rgba(37,99,235,.1); }
+.todo h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: -0.02em; color: var(--blue-d); }
+.todo ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.todo li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.65; color: var(--text); }
+.todo li::before { content: ""; margin-top: 7px; width: 7px; height: 7px; border-radius: 999px; flex: none; background-image: linear-gradient(140deg, #38bdf8 0%, #2563eb 60%, #1e3a8a 100%); }
+
+.closing { font-size: 13.5px; font-weight: 500; line-height: 1.8; color: #7b8798; text-align: center; text-wrap: balance; }
+.closing b { color: var(--blue-d); font-weight: 700; }
+
+/* 체험 신청 */
+.trial { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 22px; padding: 34px 22px 30px; border-radius: 26px; background-image: var(--grad-box); box-shadow: inset 0 0 0 1px rgba(37,99,235,.1), 0 30px 60px -40px rgba(37,99,235,.45); text-align: center; }
+.trial .title-grad { font-size: clamp(22px, 5.6vw, 26px); }
+.trial .desc { font-size: 13.5px; color: var(--text); line-height: 1.75; max-width: 420px; text-wrap: balance; }
+.seats p { margin: 0; font-size: 13px; font-weight: 600; color: var(--muted); }
+.seats p b { color: var(--blue-d); font-weight: 800; font-size: 15px; }
+.form { width: 100%; max-width: 340px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.form .fixed { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; }
+.form .fixed span { padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--blue-d); background: #fff; box-shadow: 0 0 0 1px rgba(56,189,248,.35); }
+.form .inp { max-width: none; }
+.form .inp input { padding-right: 22px; background: #fff; box-shadow: 0 0 0 1px rgba(56,189,248,.3); }
+.form .inp input:focus { box-shadow: 0 0 0 2px rgba(56,189,248,.6); }
+.agree { display: flex; gap: 9px; align-items: flex-start; text-align: left; font-size: 12px; line-height: 1.6; color: #7b8798; cursor: pointer; padding-inline: 4px; max-width: 340px; }
+.agree input { margin: 2px 0 0; width: 16px; height: 16px; accent-color: var(--blue); flex: none; }
+.agree a { color: var(--blue-d); }
+.err { margin: 0; min-height: 1.2em; font-size: 12.5px; font-weight: 600; color: var(--blue-d); }
+.done { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.done .ok { width: 52px; height: 52px; border-radius: 999px; display: grid; place-items: center; background-image: var(--grad-btn); box-shadow: var(--btn-shadow); animation: pop .6s var(--ease) both; }
+.done h3 { margin: 6px 0 0; font-size: 19px; font-weight: 800; letter-spacing: -0.025em; color: var(--ink); }
+.done p { margin: 0; font-size: 13.5px; color: var(--muted); font-weight: 500; }
+.done .look { margin-top: 18px; font-size: 13.5px; color: var(--text); }
+.kakao {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; padding: 14px 28px; border-radius: 999px; text-decoration: none;
+  font-size: 14.5px; font-weight: 800; letter-spacing: -0.015em; color: var(--kakao-ink); background: var(--kakao); box-shadow: 0 10px 24px -14px rgba(25,22,0,.6);
+  transition: transform .35s cubic-bezier(.34,1.4,.44,1);
+}
+.kakao:hover { transform: translateY(-2px); }
+.peek { font-size: 12.5px; font-weight: 600; color: var(--faint); text-decoration: none; }
+.peek:hover { color: var(--blue-d); }
+
+@media (max-width: 520px) {
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .screen { padding-block: 88px 120px; }
+  .logo { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .in, .out, .done .ok { animation: none; }
+  .title-grad, .hero .cta, .hero > * { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<button class="logo" id="logo" type="button" aria-label="처음으로">DoDay6</button>
+<main id="stage" aria-live="polite"></main>
+<button class="back" id="back" type="button" aria-label="이전" hidden>
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M14.5 5.5 8 12l6.5 6.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+<div class="chap" id="chap" hidden></div>
+<div class="dashes" id="dashes" hidden></div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- 설정: 올리기 전에 여기만 채우면 됩니다 (README.md 참고) ----------
+  const CONFIG = {
+    SHEET_URL: "",          // 구글 Apps Script 웹 앱 주소 (https://script.google.com/macros/s/.../exec)
+    KAKAO_URL: "https://pf.kakao.com/_KxlkrX/chat",   // 카카오톡 채널 채팅 주소
+    PRIVACY_URL: "https://doday6.com/legal/privacy.html",
+    HOME_URL: "https://www.doday6.com/site/",
+    RETENTION: "수집일로부터 6개월",   // 개인정보 보유 기간. 처리방침과 같게 적어주세요
+    TOTAL_SEATS: 10,
+    TRIAL: "2개월",
+    CALL_DAYS: 3            // 신청 후 연락드리는 기한(일)
+  };
+
+  const ARROW = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9.5 5.5 16 12l-6.5 6.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const CHECK = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const TALK = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.5c-5.25 0-9.5 3.3-9.5 7.38 0 2.62 1.76 4.92 4.4 6.23l-.9 3.3c-.08.3.26.54.52.37l3.9-2.58c.52.06 1.05.1 1.58.1 5.25 0 9.5-3.31 9.5-7.4S17.25 3.5 12 3.5Z"/></svg>';
+
+  // ---------- 질문 ----------
+  const CH = ["", "우리 학원", "도구와 학부모 소통", "숙제와 테스트", "원장님 생각", "도입 계획"];
+
+  const STUDENTS = { "30명 이하": 20, "31~60명": 45, "61~100명": 80, "101~150명": 125, "151명 이상": 180 };
+  const T_GRADE = { "30분 이하": 20, "30분~1시간": 45, "1~2시간": 90, "2시간 이상": 150 };   // 하루 분
+  const R_WEEK = { "1시간 이하": 45, "1~3시간": 120, "3~5시간": 240, "5시간 이상": 330 };    // 일주일 분
+  const FREE_COST = "학원 부담 없음 (학부모 결제)";
+  const UNKNOWN_COST = "잘 모르겠어요";
+  const COST = { [FREE_COST]: 0, "5만 원 이하": 3, "5~10만 원": 7.5, "10~20만 원": 15, "20만 원 이상": 25, [UNKNOWN_COST]: null };   // 만 원
+  const TOOLS = ["단어 앱·프로그램", "문법 프로그램", "원서 읽기 프로그램", "레벨테스트 프로그램", "출결 관리 프로그램", "학부모 알림 서비스"];
+  const NONE_TOOL = "따로 쓰는 프로그램 없음";
+  const NONE_HW = "따로 안 내요";
+  const NONE_FIX = "따로 하지 않아요";
+  const NONE_WORRY = "특별히 없어요";
+  const DIRECT = "문자·카톡으로 직접 보내요", AUTO = "프로그램에서 자동으로 나가요", MEET = "상담할 때만 말씀드려요", NO_REPORT = "따로 알리지 않아요";
+  const TIMING = { "이번 주부터 바로": 5, "이번 달 안에": 4, "다음 달부터": 3, "신학기(1~2월)부터": 2, "먼저 자세히 보고 정할게요": 1 };
+  const MISS = ["0~1명", "2~3명", "4~5명", "6명 이상"];
+  const PAPER = "종이 시험을 보고 직접 채점해요", NO_LTEST = "따로 하지 않아요";
+  const WORRY_ANS = {
+    "기존 자료를 옮기는 일": "필요한 프로그램만 켜서 쓰는 방식이라, 지금 쓰시는 것을 그대로 두고 <strong>함께</strong> 써보실 수 있어요.",
+    "선생님·학생이 적응하는 것": "원장님이 하실 일은 <strong>아침에 안 한 아이 확인</strong>과 <strong>월요일 1등 칭찬</strong> 두 가지예요. 아이들은 코인과 주간 순위로 매일 들어올 이유가 생겨요.",
+    "학부모님 반응": "학부모님은 앱 설치나 로그인 없이 <strong>카톡 알림톡 링크</strong>로 보세요. 새로 배우실 것이 없어요.",
+    "비용이 늘어나는 것": `체험 ${CONFIG.TRIAL}은 무료이고, 알림톡 발송비는 <strong>기본료에 포함</strong>돼 있어요.`,
+    "써보다 흐지부지될까 봐": "체험이 끝난 뒤 이어서 쓸지는 <strong>원장님이 정하시면</strong> 돼요."
+  };
+
+  // skip이 참이면 그 질문은 건너뛴다.
+  const Q = [
+    { id: "type", ch: 1, title: "학원 형태를 골라주세요", kind: "single",
+      opts: ["영어 전문 학원", "종합 학원 (영어 포함)", "공부방", "교습소"] },
+    { id: "grade", ch: 1, title: "가장 많은 학년은 어디인가요?", help: "최대 3개까지 고를 수 있어요", kind: "multi", max: 3, flow: "col",
+      opts: ["초등 저학년", "초등 고학년", "중등", "고등"] },
+    { id: "students", ch: 1, title: "지금 재원생은 몇 명인가요?", kind: "single",
+      opts: Object.keys(STUDENTS) },
+    { id: "staff", ch: 1, title: "수업하시는 선생님은 원장님 포함 몇 분이세요?", kind: "single",
+      opts: ["원장님 혼자", "2~3명", "4명 이상"] },
+
+    { id: "tools", ch: 2, title: "지금 쓰는 프로그램을 모두 골라주세요", help: "쓰고 있는 건 전부 눌러주세요", kind: "multi",
+      opts: [...TOOLS, NONE_TOOL], exclusive: NONE_TOOL },
+    { id: "cost", ch: 2, title: "고르신 프로그램 비용을 모두 합치면 한 달에 얼마쯤인가요?", help: "대략으로 골라주셔도 괜찮아요", kind: "single",
+      opts: Object.keys(COST), skip: () => !toolCount(A.tools) },
+    { id: "report", ch: 2, title: "학부모님께 학습 상황은 어떻게 알리세요?", kind: "single",
+      opts: [DIRECT, AUTO, MEET, NO_REPORT] },
+    { id: "rweek", ch: 2, title: "학부모님 문자에 일주일에 시간이 얼마나 드세요?", kind: "single",
+      opts: Object.keys(R_WEEK), skip: () => A.report !== DIRECT },
+
+    { id: "hw", ch: 3, title: "숙제는 어떻게 내세요?", help: "내는 방식을 모두 눌러주세요", kind: "multi",
+      opts: ["교재·워크북", "프린트", "단어 외우기", "프로그램·앱", "원서 읽기", NONE_HW], exclusive: NONE_HW },
+    { id: "miss", ch: 3, title: "숙제를 못 해 오는 학생은 10명 중 몇 명쯤인가요?", kind: "single",
+      opts: MISS, skip: () => noHomework() },
+    { id: "hwfix", ch: 3, title: "숙제를 못 해 오면 어떻게 하세요?", help: "하고 계신 걸 모두 눌러주세요", kind: "multi",
+      opts: ["학원에 남겨서 하게 해요", "학부모님께 연락드려요", "다음 수업에 다시 내요", "벌점이나 보상으로 관리해요", NONE_FIX], exclusive: NONE_FIX,
+      skip: () => noHomework() },
+    { id: "tgrade", ch: 3, title: "단어 시험, 숙제, 레벨테스트를 채점하고 확인하는 데 하루 몇 분 쓰세요?", kind: "single",
+      opts: Object.keys(T_GRADE) },
+    { id: "ltest", ch: 3, title: "상담 오는 학생의 레벨테스트는 어떻게 하세요?", kind: "single",
+      opts: [PAPER, "프로그램으로 시험을 봐요", "면담이나 구두로 판단해요", NO_LTEST] },
+
+    { id: "satisfy", ch: 4, title: "지금 학생 관리 방식, 원장님 마음에 드세요?", kind: "single",
+      opts: ["지금 그대로가 좋아요", "대체로 괜찮아요", "괜찮은데 손이 많이 가요", "바꾸고 싶은 부분이 있어요", "새 방식을 찾고 있어요"] },
+    { id: "worry", ch: 4, title: "새 프로그램을 쓴다면 어떤 게 가장 마음에 걸리세요?", help: "최대 2개까지 고를 수 있어요", kind: "multi", max: 2,
+      opts: [...Object.keys(WORRY_ANS), NONE_WORRY], exclusive: NONE_WORRY },
+
+    { id: "decider", ch: 5, title: "새 프로그램은 보통 누가 정하세요?", kind: "single",
+      opts: ["제가 직접 정해요", "선생님들과 의견을 나눠 정해요", "대표님·본사와 함께 정해요"] },
+    // 비교해 볼 것을 전제로, 언제부터인지만 묻는다
+    { id: "timing", ch: 5, kind: "single",
+      title: () => `${toolCount(A.tools) ? "지금 쓰시는 프로그램과" : "지금 방식과"} 무료로 비교해 볼 수 있다면, 언제부터 가능하세요?`,
+      opts: Object.keys(TIMING) }
+  ];
+
+  // ---------- 파일럿 우선순위 점수 (시트에만 저장, 화면에는 안 보임) ----------
+  // 최대 24점. 16점 이상 A(우선 연락), 11~15점 B, 10점 이하 C. README.md에 기준표가 있습니다.
+  const SCORE = {
+    students: { "30명 이하": 1, "31~60명": 3, "61~100명": 3, "101~150명": 1, "151명 이상": 0 },
+    staff: { "원장님 혼자": 3, "2~3명": 2, "4명 이상": 0 },
+    decider: { "제가 직접 정해요": 3, "선생님들과 의견을 나눠 정해요": 2, "대표님·본사와 함께 정해요": 0 },
+    timing: TIMING,
+    satisfy: { "새 방식을 찾고 있어요": 2, "바꾸고 싶은 부분이 있어요": 2, "괜찮은데 손이 많이 가요": 1, "대체로 괜찮아요": 0, "지금 그대로가 좋아요": 0 }
+  };
+  function pilotScore() {
+    let s = 0;
+    Object.keys(SCORE).forEach(k => { s += SCORE[k][A[k]] || 0; });
+    if (A.report && A.report !== AUTO) s += 1;
+    if ((T_GRADE[A.tgrade] || 0) >= 90) s += 1;
+    if (A.miss && A.miss !== MISS[0]) s += 1;
+    if ((A.worry || []).includes(NONE_WORRY)) s += 1;
+    if (phone && agreed) s += 1;
+    if (submitted && !submitted.waitlist) s += 3;
+    return { score: s, grade: s >= 16 ? "A" : s >= 11 ? "B" : "C" };
+  }
+
+  // ---------- 상태 ----------
+  const STORE_KEY = "dd6-check-v5";
+  let A = {};
+  let name = "", dong = "", owner = "", phone = "", agreed = false;
+  let submitted = null;
+  let sid = "";
+  let src = {};
+  let step = 0;       // 0 첫 화면, 1 안내, 2 학원 이름, 3 동, 4.. 질문, CONTACT 리포트 받기, R 리포트
+  const FIRST_Q = 4;
+  const CONTACT = FIRST_Q + Q.length;
+  const R = CONTACT + 1;
+
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+    if (s && typeof s === "object") {
+      A = s.A || {}; name = s.name || ""; dong = s.dong || ""; owner = s.owner || ""; phone = s.phone || "";
+      agreed = !!s.agreed; submitted = s.submitted || null; sid = s.sid || ""; src = s.src || {};
+    }
+  } catch (e) {}
+  if (!sid) sid = newId();
+  // 광고 유입 경로: 처음 들어온 주소의 utm 값을 기억한다
+  try {
+    const p = new URLSearchParams(location.search);
+    const u = { source: p.get("utm_source"), medium: p.get("utm_medium"), campaign: p.get("utm_campaign") };
+    if (u.source || u.medium || u.campaign) src = u;
+    if (!src.referrer && document.referrer) src.referrer = document.referrer.slice(0, 200);
+  } catch (e) {}
+  function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify({ A, name, dong, owner, phone, agreed, submitted, sid, src })); } catch (e) {} }
+  function newId() {
+    try { if (crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
+    return "id-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+  }
+
+  // ---------- 계산 ----------
+  function toolCount(a) { return (a || []).filter(x => x !== NONE_TOOL).length; }
+  function noHomework() { const h = A.hw || []; return h.length === 1 && h[0] === NONE_HW; }
+  function timeCalc() {
+    const grade = T_GRADE[A.tgrade] || 0;
+    const week = A.report === DIRECT ? (R_WEEK[A.rweek] || 0) : 0;
+    const reportMonth = Math.round(week * 4.3);
+    const month = Math.round((grade * 22 + reportMonth) / 60);
+    return { grade, reportMonth, month, year: month * 12 };
+  }
+  function costCalc() {
+    const v = COST[A.cost];
+    const students = STUDENTS[A.students] || 0;
+    const total = v || 0;
+    return { total, free: v === 0, unknown: v === null, per: students && total ? total * 10000 / students : 0 };
+  }
+  function won(n) { return (Math.round(n / 100) * 100).toLocaleString("ko-KR") + "원"; }
+  function man(v) { return (Math.round(v * 10) / 10).toLocaleString("ko-KR"); }
+  function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]); }
+  function who() { return name ? esc(name) : "원장님 학원"; }
+  // 받침이 있으면 a, 없으면 b
+  function josa(w, a, b) { const c = w.charCodeAt(w.length - 1); return c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 ? a : b; }
+  function fmtPhone(v) {
+    let d = v.replace(/\D/g, "");
+    if (d.startsWith("02")) {
+      d = d.slice(0, 10);
+      if (d.length < 3) return d;
+      if (d.length < 6) return `${d.slice(0, 2)}-${d.slice(2)}`;
+      if (d.length < 10) return `${d.slice(0, 2)}-${d.slice(2, 5)}-${d.slice(5)}`;
+      return `${d.slice(0, 2)}-${d.slice(2, 6)}-${d.slice(6)}`;
+    }
+    d = d.slice(0, 11);
+    if (d.length < 4) return d;
+    if (d.length < 8) return `${d.slice(0, 3)}-${d.slice(3)}`;
+    if (d.startsWith("01") || d.length === 11) return `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`;
+    return `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6)}`;
+  }
+  function phoneOk(v) { return v.replace(/\D/g, "").length >= 9; }
+  const reduce = (() => { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } })();
+
+  // ---------- 구글 시트로 보내기 ----------
+  // 같은 sid는 시트에서 한 줄로 합쳐진다 (report → lead → applied 순으로 단계가 올라감).
+  function record(stage) {
+    const t = timeCalc(), c = costCalc(), p = pilotScore();
+    const list = k => (A[k] || []).join(", ");
+    return {
+      sid, stage, academy: name, dong, owner, phone: agreed ? phone : "", agreed: agreed ? "예" : "",
+      score: p.score, grade: p.grade,
+      type: A.type, grades: list("grade"), students: A.students, staff: A.staff,
+      tools: list("tools"), cost: A.cost, report: A.report, rweek: A.rweek,
+      hw: list("hw"), miss: A.miss, hwfix: list("hwfix"), tgrade: A.tgrade, ltest: A.ltest,
+      satisfy: A.satisfy, worry: list("worry"), decider: A.decider, timing: A.timing,
+      hoursPerMonth: t.month, costPerStudent: c.per ? Math.round(c.per) : "",
+      waitlist: submitted && submitted.waitlist ? "예" : "",
+      utm_source: src.source, utm_medium: src.medium, utm_campaign: src.campaign, referrer: src.referrer,
+      kst: new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })
+    };
+  }
+  async function send(stage) {
+    if (!CONFIG.SHEET_URL) return false;
+    const body = JSON.stringify(record(stage));
+    const opt = { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body, keepalive: true };
+    try {
+      const r = await fetch(CONFIG.SHEET_URL, opt);
+      const j = await r.json();
+      return !!(j && j.ok);
+    } catch (e) {
+      // 응답을 읽지 못하는 환경(CORS)이면 한 번 더 보내고, 보내진 것으로 본다. 시트에서 sid로 합쳐지므로 중복되지 않는다.
+      try { await fetch(CONFIG.SHEET_URL, { ...opt, mode: "no-cors" }); return true; } catch (e2) { return false; }
+    }
+  }
+  function stageNow() { return submitted ? "applied" : (phone && agreed) ? "lead" : "report"; }
+
+  // ---------- 화면 전환 ----------
+  const stage = document.getElementById("stage");
+  const backBtn = document.getElementById("back");
+  const dashes = document.getElementById("dashes");
+  const chap = document.getElementById("chap");
+  let busy = false, goBack = false, placeCurrent = null;
+
+  function go(n) {
+    if (busy) return;
+    goBack = n < step;
+    const cur = stage.firstElementChild;
+    const swap = () => { step = n; save(); render(); window.scrollTo(0, 0); busy = false; };
+    if (!cur || reduce) return swap();
+    busy = true;
+    cur.classList.remove("in", "rev"); cur.classList.add("out"); if (goBack) cur.classList.add("rev");
+    setTimeout(swap, 300);
+  }
+  function isOn(q) { return !q.skip || !q.skip(); }
+  // 다음 화면. 건너뛰는 질문의 예전 답은 지운다.
+  function nextStep(s) {
+    let n = s + 1;
+    while (n >= FIRST_Q && n < CONTACT && !isOn(Q[n - FIRST_Q])) { delete A[Q[n - FIRST_Q].id]; n++; }
+    return n;
+  }
+  function prevStep(s) {
+    let n = s - 1;
+    while (n >= FIRST_Q && n < CONTACT && !isOn(Q[n - FIRST_Q])) n--;
+    return n;
+  }
+  // 로고: 답과 신청 상태를 모두 지우고 첫 화면으로 (중간이면 먼저 묻는다)
+  document.getElementById("logo").onclick = () => {
+    A = {}; name = ""; dong = ""; owner = ""; phone = ""; agreed = false; submitted = null; sid = newId(); go(0);
+  };
+  backBtn.onclick = () => { if (step > 0) go(prevStep(step)); };
+
+  function chrome() {
+    backBtn.hidden = step === 0;
+    const qi = step - FIRST_Q;
+    const inQ = qi >= 0 && qi < Q.length;
+    dashes.hidden = chap.hidden = !inQ;
+    if (inQ) {
+      const c = Q[qi].ch;
+      dashes.innerHTML = CH.slice(1).map((_, i) => `<span class="${i + 1 === c ? "on" : i + 1 < c ? "done" : ""}"></span>`).join("");
+      chap.textContent = `${c}장 ${CH[c]}`;
+    }
+  }
+  function mount(html, cls) {
+    placeCurrent = null;
+    stage.innerHTML = `<section class="screen in ${goBack ? "rev" : ""} ${cls || ""}">${html}</section>`;
+    chrome();
+  }
+  function render() {
+    if (step === 0) return renderHero();
+    if (step === 1) return renderIntro();
+    if (step === 2) return renderText("name");
+    if (step === 3) return renderText("dong");
+    if (step === CONTACT) return renderContact();
+    if (step === R) return renderReport();
+    return renderQ(Q[step - FIRST_Q], step - FIRST_Q);
+  }
+
+  // ---------- 첫 화면 ----------
+  function renderHero() {
+    mount(`
+      <div class="col hero">
+        <div class="eyebrow" style="--d:0">ENGLISH ACADEMY CHECK-UP</div>
+        <div class="lead" style="--d:1">영어학원 원장님을 위한</div>
+        <div class="title-grad" style="--d:2">2분 관리 점검</div>
+        <div class="sub" style="--d:3">고르기만 하시면<br>우리 학원 진단 리포트가 완성돼요</div>
+        <button class="cta" id="start" type="button" style="--d:4">점검 시작하기</button>
+        <div class="meta" style="--d:5">무료<i></i>객관식<i></i>현직 원장님이 만든 DoDay6</div>
+      </div>`);
+    document.getElementById("start").onclick = () => go(1);
+  }
+
+  // ---------- 안내 ----------
+  function renderIntro() {
+    mount(`
+      <div class="col intro">
+        <div class="plain">정답은 없어요.<br>지금 학원 모습 그대로 골라주세요.</div>
+        <button class="next" id="next" type="button" aria-label="다음">${ARROW}</button>
+      </div>`);
+    document.getElementById("next").onclick = () => go(2);
+  }
+
+  // ---------- 학원 이름 / 동 ----------
+  function renderText(kind) {
+    const isName = kind === "name";
+    const val = isName ? name : dong;
+    mount(`
+      <div class="col">
+        <div class="ask">${isName ? `<span class="help">리포트에 학원 이름으로 적어드려요</span>` : `<span class="who">${who()}</span>`}<span class="q">${isName ? "학원 이름" : "학원이 있는 동"}</span>${isName ? "" : `<span class="help">예: 중계동</span>`}</div>
+        <div class="inp">
+          <input id="txt" maxlength="${isName ? 40 : 20}" ${isName ? 'autocomplete="organization"' : ""} aria-label="${isName ? "학원 이름" : "학원이 있는 동"}" value="${esc(val)}">
+          <button class="go" id="next" type="button" aria-label="다음" ${val.trim() ? "" : "disabled"}>${ARROW}</button>
+        </div>
+      </div>`);
+    const inp = document.getElementById("txt"), nx = document.getElementById("next");
+    const set = v => { if (isName) name = v; else dong = v; };
+    const done = () => { set(inp.value.trim()); go(isName ? 3 : FIRST_Q); };
+    inp.oninput = () => { set(inp.value); nx.disabled = !inp.value.trim(); save(); };
+    inp.onkeydown = e => { if (e.key === "Enter" && inp.value.trim() && !e.isComposing) done(); };
+    nx.onclick = done;
+    setTimeout(() => { try { inp.focus({ preventScroll: true }); } catch (e) {} }, 350);
+  }
+
+  // ---------- 질문 ----------
+  function renderQ(q, qi) {
+    const isMulti = q.kind === "multi";
+    const title = typeof q.title === "function" ? q.title() : q.title;
+    const opts = q.opts;
+    const btns = opts.map((o, i) => `<button type="button" data-i="${i}" aria-pressed="false">${esc(o)}</button>`).join("");
+    let control = "";
+    if (q.kind === "single") control = `<div class="well" role="group" aria-label="${esc(title)}"><span class="pill"></span>${btns}</div>`;
+    else control = `<div class="chips${q.flow === "col" ? " colflow" : ""}" role="group" aria-label="${esc(title)}">${btns}</div>`;
+    mount(`
+      <div class="col">
+        <div class="ask"><span class="who">${who()}</span><span class="q">${esc(title)}</span>${q.help ? `<span class="help">${esc(q.help)}</span>` : ""}</div>
+        ${control}
+        <button class="next" id="next" type="button" aria-label="다음 질문" style="visibility:hidden">${ARROW}</button>
+      </div>`);
+
+    const nx = document.getElementById("next");
+    let leaving = false;
+
+    function placePill() {
+      const wrap = stage.querySelector(".well");
+      if (!wrap) return;
+      const pill = wrap.querySelector(".pill");
+      const on = wrap.querySelector('button[aria-pressed="true"]');
+      if (!on) { pill.style.opacity = "0"; return; }
+      const first = pill.style.opacity !== "1";
+      if (first) pill.style.transition = "none";
+      pill.style.height = on.offsetHeight + "px";
+      pill.style.transform = `translateY(${on.offsetTop - 6}px)`;
+      if (first) { void pill.offsetHeight; pill.style.transition = ""; }
+      pill.style.opacity = "1";
+    }
+    function refresh() {
+      const v = A[q.id];
+      const has = isMulti ? (v && v.length) : v != null;
+      nx.style.visibility = has ? "visible" : "hidden";
+      stage.querySelectorAll("button[data-i]").forEach(b => {
+        const o = opts[+b.dataset.i];
+        b.setAttribute("aria-pressed", String(isMulti ? (v || []).includes(o) : v === o));
+      });
+      placePill();
+    }
+    stage.querySelectorAll("button[data-i]").forEach(b => b.onclick = () => {
+      const o = opts[+b.dataset.i];
+      if (isMulti) {
+        let cur = (A[q.id] || []).slice();
+        if (cur.includes(o)) cur = cur.filter(x => x !== o);
+        else if (q.exclusive && o === q.exclusive) cur = [o];
+        else {
+          cur = cur.filter(x => x !== q.exclusive);
+          if (q.max && cur.length >= q.max) cur.shift();
+          cur.push(o);
+        }
+        A[q.id] = cur;
+        save(); refresh();
+        return;
+      }
+      A[q.id] = o;
+      save(); refresh();
+      // 하나 고르는 질문은 알약이 미끄러진 뒤 바로 다음으로
+      if (!leaving) { leaving = true; setTimeout(() => go(nextStep(step)), reduce ? 0 : 380); }
+    });
+    nx.onclick = () => go(nextStep(step));
+    refresh();
+    placeCurrent = placePill;
+    requestAnimationFrame(placePill);
+  }
+
+  // ---------- 리포트 받기 (선택) ----------
+  function consentText(withOwner) {
+    return `${withOwner ? "체험 안내 연락" : "리포트 발송과 체험 안내 연락"}을 위해 학원 이름·동·${withOwner ? "성함·" : ""}연락처·점검 답변을 수집하고, ${esc(CONFIG.RETENTION)} 보관한 뒤 파기합니다. 동의하지 않으셔도 되며, 이 경우 ${withOwner ? "체험 신청 대신 카톡 채널로 문의하실 수 있어요" : "리포트는 화면으로만 보실 수 있어요"}. <a href="${esc(CONFIG.PRIVACY_URL)}" target="_blank" rel="noopener">개인정보 처리방침</a>`;
+  }
+  function renderContact() {
+    mount(`
+      <div class="col">
+        <div class="ask soft"><span class="who">리포트가 다 만들어졌어요</span><span class="q">나중에 다시 보실 수 있게<br>리포트를 보내드릴까요?</span></div>
+        <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div class="inp">
+            <input id="ph" type="tel" inputmode="tel" maxlength="13" autocomplete="tel" placeholder="010-0000-0000" aria-label="리포트 받으실 번호" value="${esc(phone)}">
+            <button class="go" id="next" type="button" aria-label="리포트 받기" disabled>${ARROW}</button>
+          </div>
+          <label class="agree" for="agree0"><input type="checkbox" id="agree0" ${agreed ? "checked" : ""}><span>${consentText(false)}</span></label>
+          <button class="skip" id="skip" type="button">번호 없이 화면으로 볼게요</button>
+        </div>
+      </div>`);
+    const inp = document.getElementById("ph"), nx = document.getElementById("next"), ag = document.getElementById("agree0");
+    const ok = () => phoneOk(inp.value) && ag.checked;
+    const done = () => { phone = inp.value.trim(); agreed = true; save(); go(R); };
+    nx.disabled = !ok();
+    inp.oninput = () => { inp.value = fmtPhone(inp.value); phone = inp.value; nx.disabled = !ok(); save(); };
+    ag.onchange = () => { agreed = ag.checked; nx.disabled = !ok(); save(); };
+    inp.onkeydown = e => { if (e.key === "Enter" && !e.isComposing && ok()) done(); };
+    nx.onclick = () => { if (ok()) done(); };
+    document.getElementById("skip").onclick = () => { phone = ""; agreed = false; go(R); };
+  }
+
+  // ---------- 리포트 ----------
+  function sec(no, title, picks, mine, dd) {
+    return `<section class="sec">
+      <div class="sec-h"><span class="no">${no}</span><span class="tt">${title}</span></div>
+      ${picks.filter(Boolean).length ? `<div class="picks">${picks.filter(Boolean).map(p => `<span>${esc(p)}</span>`).join("")}</div>` : ""}
+      <div class="paras">${mine.filter(Boolean).map(m => `<div class="para"><span>${m}</span></div>`).join("")}</div>
+      ${dd ? `<div class="act"><b>DoDay6로 하면</b><span>${dd}</span></div>` : ""}
+    </section>`;
+  }
+
+  function renderReport() {
+    const tools = (A.tools || []).filter(x => x !== NONE_TOOL);
+    const n = tools.length;
+    const hw = (A.hw || []).filter(x => x !== NONE_HW);
+    const fix = (A.hwfix || []).filter(x => x !== NONE_FIX);
+    const worry = (A.worry || []).filter(x => x !== NONE_WORRY);
+    const t = timeCalc();
+    const c = costCalc();
+
+    // 결론: 답에서 손이 가장 많이 가는 곳 두 가지
+    const pains = [];
+    if (A.report === DIRECT) pains.push("학부모님 문자");
+    if (t.grade >= 45) pains.push("채점·숙제 확인");
+    if (A.miss && A.miss !== MISS[0]) pains.push("숙제 못 해 온 학생 챙기기");
+    if (n >= 2) pains.push(`따로 쓰는 프로그램 ${n}개`);
+    if (A.report === MEET || A.report === NO_REPORT) pains.push("학부모님께 보여드릴 학습 기록");
+    if (A.ltest === PAPER) pains.push("레벨테스트 채점");
+    if (!pains.length) pains.push("매일 직접 챙기시는 관리");
+    const [p1, p2] = pains;
+    const last = p2 || p1;
+    const verdict = `<div class="verdict"><small>진단 결론</small>
+      <p>${who()}에서 지금 손이 가장 많이 가는 곳은</p>
+      <p><em>${esc(p1)}</em>${p2 ? `${josa(p1, "과", "와")} <em>${esc(p2)}</em>` : ""}${josa(last, "이에요", "예요")}.</p>
+      <p class="note">답해주신 내용만으로 정리했어요.</p></div>`;
+
+    // 01 도구와 학부모 소통
+    const s1 = [];
+    if (n === 0) s1.push("따로 쓰는 프로그램 없이 원장님이 직접 관리하고 계세요.");
+    else if (n === 1) s1.push(`${esc(tools[0])} 하나를 쓰고, 나머지는 직접 챙기고 계세요.`);
+    else s1.push(`프로그램 ${n}개를 따로 쓰고 계세요. 학생 한 명의 기록이 ${n}곳에 나뉘어 있어요.`);
+    if (A.report === DIRECT) s1.push(`학부모님 문자에 일주일 ${esc(A.rweek || "")}, 한 달이면 약 <strong>${Math.round(t.reportMonth / 60)}시간</strong>이 들어요.`);
+    else if (A.report === AUTO) s1.push("학부모님 소식은 이미 프로그램에서 자동으로 나가고 있어요.");
+    else if (A.report === MEET) s1.push("학부모님은 상담 때 아이 소식을 들으세요. 상담과 상담 사이에는 소식이 뜸할 수 있어요.");
+    else if (A.report === NO_REPORT) s1.push("학부모님께는 따로 학습 소식을 보내지 않고 계세요.");
+    const d1 = "단어(매일보카), 문법(그래머헌터), 원서(리딩원정대), 레벨테스트, 출결, 일일보고서가 <strong>한 곳</strong>에 있고, 필요한 것만 켜서 써요. 일일보고서와 주간 성적은 <strong>카톡 알림톡</strong>으로 가고, 학부모님은 로그인 없이 링크로 보세요. 발송비는 기본료에 포함돼 있어요.";
+
+    // 02 숙제와 채점
+    const s2 = [];
+    if (!hw.length) s2.push("숙제를 따로 내지 않고 수업 안에서 마무리하고 계세요.");
+    else {
+      if (A.miss) s2.push(`숙제를 못 해 오는 학생은 10명 중 <strong>${esc(A.miss)}</strong>이에요.`);
+      if (!hw.includes("프로그램·앱")) s2.push("종이 숙제는 다음 수업에 와서야 했는지 확인할 수 있어요.");
+      if (fix.includes("학원에 남겨서 하게 해요")) s2.push("못 해 온 학생을 남기면 원장님 시간도 같이 남아요.");
+      if (fix.includes("학부모님께 연락드려요")) s2.push("학부모님 연락도 한 분씩 직접 하고 계세요.");
+    }
+    if (A.tgrade) s2.push(`채점과 확인에 하루 ${esc(A.tgrade)}가 들어요.`);
+    const d2 = "안 한 아이는 아침에 <strong>오늘 학습 현황</strong>에서 한눈에 보여요. 공부한 만큼 코인이 쌓이고 반 순위는 <strong>월요일마다 새로</strong> 시작해서, 지난주에 못 한 아이도 다시 1등 후보가 돼요.";
+
+    // 03 레벨테스트
+    const s3 = [({
+      [PAPER]: "종이 시험은 채점이 끝날 때까지 상담이 잠시 멈춰요.",
+      "프로그램으로 시험을 봐요": "레벨테스트는 이미 프로그램으로 보고 계세요.",
+      "면담이나 구두로 판단해요": "면담으로 보시면 결과를 학부모님께 종이로 남겨 드리기 어려워요.",
+      [NO_LTEST]: "따로 레벨테스트 없이 상담하고 계세요."
+    })[A.ltest]];
+    const d3 = "레벨테스트는 단어·문법·독해·듣기 <strong>4영역</strong>이고, 끝나면 <strong>결과지가 바로</strong> 나와요. 학부모님께 결과지 링크를 보내 드릴 수 있고, 기본료에 포함돼 있어요.";
+
+    // 04 시간
+    const s4 = [`채점·확인${t.reportMonth ? "과 학부모님 문자" : ""}에 한 달 약 <strong>${t.month}시간</strong>, 1년이면 약 ${t.year}시간이 들어요.`];
+    const d4 = "단어·문법·원서 결과는 <strong>일일보고서</strong>에 모이고, 보고서는 출석·과제·태도는 누르기만, 수업·숙제·한마디만 쓰면 끝나요. 원장님이 하실 일은 <strong>아침에 안 한 아이 확인</strong>, <strong>월요일 1등 칭찬</strong> 두 가지예요.";
+
+    // 05 비용
+    const s5 = [];
+    if (!n) s5.push("따로 내는 프로그램 비용은 없어요.");
+    else if (c.free) s5.push("프로그램 비용은 학부모님이 내고 계세요.");
+    else if (c.unknown) s5.push("합계 금액은 정확히 모르신다고 하셨어요. 체험 상담 때 함께 정리해 드릴게요.");
+    else if (c.total) {
+      s5.push(`프로그램 ${n}개에 한 달 약 <strong>${man(c.total)}만 원</strong>, 1년이면 약 ${man(c.total * 12)}만 원이에요.`);
+      if (c.per) s5.push(`재원생 1명당 한 달 약 ${won(c.per)}이에요.`);
+    }
+    const d5 = "단어, 문법, 원서, 레벨테스트, 출결, 일일보고서가 <strong>한 프로그램</strong>에 들어 있고, 알림톡 발송비와 레벨테스트 결과지도 기본료에 포함돼요. 지금 쓰시는 것 중 무엇을 대신할 수 있는지는 체험하면서 직접 견줘 보세요.";
+
+    // 06 걱정하시는 부분
+    const s6 = worry.map(w => WORRY_ANS[w]);
+
+    const tiles = [
+      [n, "개", "따로 쓰는 프로그램"],
+      [t.month, "시간", "한 달 채점·문자 시간"],
+      [A.miss || "-", "", "10명 중 숙제 못 해 오는 학생"],
+      c.total ? [man(c.total), "만 원", "한 달 프로그램 비용"] : c.unknown ? ["?", "", "한 달 프로그램 비용"] : ["0", "원", "학원이 내는 비용"]
+    ];
+
+    const todo = [
+      "이번 주 숙제를 못 해 온 학생 명단을 뽑는 데 몇 분 걸리는지 한 번 재 보세요. 매주 반복되는 시간이에요.",
+      A.report === DIRECT ? "학부모님 문자를 한 번 다 보내는 데 걸리는 시간을 재 보세요. 한 달에 몇 번 보내시는지 곱하면 실제 시간이 나와요."
+        : "재원생 한 명의 첫 레벨테스트 결과를 지금 실력과 나란히 놓아 보세요. 다음 상담 자료가 돼요.",
+      n >= 2 ? "쓰고 계신 프로그램을 적고, 옆에 각각 맡은 일을 적어 보세요. 겹치는 일이 보이면 줄일 수 있는 곳이에요."
+        : "학부모님이 상담 때 가장 많이 물으시는 것 세 가지를 적어 보세요. 리포트에 꼭 들어가야 할 내용이에요."
+    ];
+
+    mount(`
+      <div class="col wide">
+        <div class="head">
+          <div class="eyebrow">DIAGNOSIS REPORT</div>
+          <div class="nm">${who()}${dong ? " · " + esc(dong) : ""}</div>
+          <div class="title-grad">영어 관리 진단 리포트</div>
+        </div>
+
+        ${verdict}
+
+        <div class="tiles">${tiles.map(([v, u, l]) => `<div class="tile"><b>${esc(String(v))}<small>${u}</small></b><span>${l}</span></div>`).join("")}</div>
+
+        ${sec("01", "도구와 학부모 소통", [...(tools.length ? tools : ["프로그램 없음"]), A.report, A.rweek ? `문자 일주일 ${A.rweek}` : ""], s1, d1)}
+        ${sec("02", "숙제와 채점", [...(hw.length ? hw : ["숙제 없음"]), A.miss ? `못 해 오는 학생 10명 중 ${A.miss}` : "", ...fix, A.tgrade ? `채점·확인 하루 ${A.tgrade}` : ""], s2, d2)}
+        ${sec("03", "레벨테스트", [A.ltest], s3, d3)}
+        ${sec("04", "시간", [A.tgrade ? `채점·확인 하루 ${A.tgrade}` : "", A.rweek ? `문자 일주일 ${A.rweek}` : ""], s4, d4)}
+        ${sec("05", "비용", [A.cost], s5, d5)}
+        ${worry.length ? sec("06", "걱정하시는 부분", worry, s6, "") : ""}
+
+        <div class="todo">
+          <h3>이번 주에 해볼 수 있는 3가지</h3>
+          <ul>${todo.map(x => `<li>${x}</li>`).join("")}</ul>
+        </div>
+
+        <div class="closing">여기까지가 질문만으로 드릴 수 있는 진단이에요.<br>실제로 시간이 줄어드는지는<br><b>원장님 학원에서 직접 써 보시면</b> 알 수 있어요.</div>
+
+        <section class="trial" id="trial"></section>
+      </div>`, "scroll");
+    renderTrial();
+    send(stageNow());
+  }
+
+  // ---------- 체험 신청 ----------
+  let seats = null;   // 시트에서 읽은 { taken }. 읽지 못하면 남은 자리를 보여주지 않는다.
+
+  function kakaoBtn(label) {
+    return CONFIG.KAKAO_URL ? `<a class="kakao" href="${esc(CONFIG.KAKAO_URL)}" target="_blank" rel="noopener">${TALK}${label}</a>` : "";
+  }
+
+  function renderTrial() {
+    const box = document.getElementById("trial");
+    if (!box) return;
+    const full = !!seats && seats.taken >= CONFIG.TOTAL_SEATS;
+    const left = seats ? Math.max(0, CONFIG.TOTAL_SEATS - seats.taken) : null;
+
+    if (submitted) {
+      box.innerHTML = `<div class="done"><span class="ok">${CHECK}</span>
+        <h3>${submitted.waitlist ? "대기 신청이 접수됐어요" : "체험 신청이 접수됐어요"}</h3>
+        <p>${esc(submitted.phone)} 번호로 ${CONFIG.CALL_DAYS}일 안에 연락드릴게요.</p>
+        ${CONFIG.KAKAO_URL ? `<p class="look">궁금한 점은 카톡 채널로 먼저 물어보셔도 돼요.</p>${kakaoBtn("카톡 채널로 이야기하기")}` : ""}
+        <a class="peek" style="margin-top:14px" href="${esc(CONFIG.HOME_URL)}" target="_blank" rel="noopener">DoDay6 홈페이지 둘러보기</a></div>`;
+      return;
+    }
+    box.innerHTML = `
+      <div class="eyebrow">FREE TRIAL</div>
+      <div class="title-grad">${full ? "이번 체험은 모두 찼어요" : `선착순 ${CONFIG.TOTAL_SEATS}개 학원,<br>${esc(CONFIG.TRIAL)} 무료로 함께해요`}</div>
+      ${full ? `<div class="desc">대기 신청을 남겨주시면 자리가 나는 순서대로 연락드릴게요.</div>`
+        : `<div class="desc">${toolCount(A.tools) ? "지금 쓰시는 프로그램과 나란히 두고, 원장님 학원에서 직접 비교해 보세요." : "지금 하시는 방식은 그대로 두고, 원장님 학원에서 직접 써보세요."}<br>중계동 영어학원 원장님이 만들어, 재원생 200명이 매일 쓰고 있어요.</div>${left != null ? `<div class="seats"><p>남은 자리 <b>${left}</b> / ${CONFIG.TOTAL_SEATS}</p></div>` : ""}`}
+      <form class="form" id="apply" novalidate>
+        <div class="fixed"><span>${esc(name || "학원 이름 없음")}${dong ? " · " + esc(dong) : ""}</span><span>재원생 ${esc(A.students || "-")}</span></div>
+        <div class="inp"><input id="owner" maxlength="20" autocomplete="name" placeholder="원장님 성함 (선택)" aria-label="원장님 성함 (선택)" value="${esc(owner)}"></div>
+        <div class="inp"><input id="phone" type="tel" inputmode="tel" maxlength="13" placeholder="연락받으실 번호" autocomplete="tel" aria-label="연락받으실 번호" value="${esc(phone)}"></div>
+        <label class="agree" for="agree"><input type="checkbox" id="agree" ${agreed ? "checked" : ""}><span>${consentText(true)}</span></label>
+        <p class="err" id="err" role="alert"></p>
+        <button class="cta" id="send" type="submit">${full ? "대기 신청하기" : `${esc(CONFIG.TRIAL)} 무료 체험 신청하기`}</button>
+        <div id="alt"></div>
+      </form>`;
+
+    const phoneEl = document.getElementById("phone");
+    phoneEl.oninput = () => { phoneEl.value = fmtPhone(phoneEl.value); };
+
+    document.getElementById("apply").onsubmit = async e => {
+      e.preventDefault();
+      const ow = document.getElementById("owner").value.trim();
+      const ph = phoneEl.value.trim();
+      const agree = document.getElementById("agree").checked;
+      const err = document.getElementById("err");
+      if (!phoneOk(ph)) { err.textContent = "연락받으실 번호를 숫자로 적어주세요. 예: 010-1234-5678"; return; }
+      if (!agree) { err.textContent = "연락을 위한 정보 수집에 동의해 주셔야 신청할 수 있어요."; return; }
+      err.textContent = "";
+      const btn = document.getElementById("send");
+      const label = btn.textContent;
+      btn.disabled = true; btn.textContent = "보내는 중";
+      owner = ow; phone = ph; agreed = true;
+      submitted = { phone: ph, waitlist: full };
+      const ok = await send("applied");
+      if (!ok) {
+        submitted = null;
+        btn.disabled = false; btn.textContent = label;
+        err.textContent = "지금은 신청이 전송되지 않았어요. 잠시 뒤 다시 눌러주세요.";
+        document.getElementById("alt").innerHTML = kakaoBtn("카톡 채널로 바로 신청하기");
+        save();
+        return;
+      }
+      save(); renderTrial();
+    };
+  }
+
+  async function loadSeats() {
+    if (!CONFIG.SHEET_URL) return;
+    try {
+      const r = await fetch(CONFIG.SHEET_URL + (CONFIG.SHEET_URL.includes("?") ? "&" : "?") + "action=seats");
+      const j = await r.json();
+      if (j && typeof j.taken === "number") { seats = { taken: j.taken }; if (step === R) renderTrial(); }
+    } catch (e) {}
+  }
+
+  addEventListener("resize", () => { if (placeCurrent) requestAnimationFrame(placeCurrent); });
+
+  // ---------- 시작 ----------
+  save();
+  render();
+  loadSeats();
+})();
+</script>
+</body>
+</html>
